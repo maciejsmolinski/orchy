@@ -6,3 +6,6 @@ build:
 
 repl:
 	@spago repl
+
+install:
+	@spago install
