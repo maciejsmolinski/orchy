@@ -7,6 +7,7 @@ exports.syncExec_ = function(success, error) {
         return function() {
             var process = spawnSync(command, args);
             var output;
+            var program;
 
             if (process.status === 0) {
                 output = process.stdout
@@ -16,7 +17,11 @@ exports.syncExec_ = function(success, error) {
                 return success(output);
             }
 
-            return error('Program exited');
+            program = [command].concat(args).join(' ')
+
+            return error(
+                'Program "' + program + '" exited with code "' + process.error.code + '"'
+            );
 
         }
     }
