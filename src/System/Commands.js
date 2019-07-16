@@ -1,8 +1,12 @@
-exports.execFn = function(command, args) {
-    return function() {
-        console.log('(Commands/exec) executing ' + command + ' with args "' + args.join(' ') + '"...');
-        console.log('-> ' + command + ' ' + args.join(' '));
-        console.log('(Commands/exec) done');
-        console.log('done');
+exports.syncExec_ = function(success, error) {
+    return function(command, args) {
+        var pretty = [command].concat(args).join(' ');
+
+        return function() {
+            console.log('(System.Commands/syncExec) executing command');
+            console.log('-> ' + pretty);
+            console.log('(System.Commands/syncExec) done');
+            return success('success');
+        }
     }
 }

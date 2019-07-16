@@ -1,13 +1,21 @@
-module Commands (exec) where
+module System.Commands (syncExec) where
 
+import Data.Either (Either(..))
 import Data.Function.Uncurried (Fn2, runFn2)
-import Data.Unit (Unit)
 import Effect (Effect)
 
 type Program = String
 type Args = Array String
+type Success = String
+type Error = String
 
-foreign import execFn :: Fn2 Program Args (Effect Unit)
+type Result = Either Error Success
 
-exec :: Program -> Args -> Effect Unit
-exec = runFn2 execFn
+foreign import syncExec_
+  :: Fn2
+     (Success -> Result)
+     (Error -> Result)
+     (Fn2 Program Args (Effect Result))
+
+syncExec :: Program -> Args -> Effect Result
+syncExec = runFn2 (runFn2 syncExec_ Right Left)
