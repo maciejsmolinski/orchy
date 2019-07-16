@@ -12,7 +12,6 @@ main = do
   runDefinition definition
   log "Orchestration done"
 
-
 definition :: Definition
 definition = makeDefinition $ [ makeCommand "git" ["status"]
                               , makeCommand "echo" ["\"done\""]
