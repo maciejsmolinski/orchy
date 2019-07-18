@@ -9,7 +9,7 @@ main :: Effect Unit
 main = runDefinition definition
 
 definition :: Definition
-definition = makeDefinition $ [ makeCommand "pwd" []
-                              , makeCommand "git" ["branch"]
-                              , makeCommand "git" ["status"]
-                              ]
+definition = makeDefinition [ makeCommand "pwd" []
+                            , makeCommand "git" ["branch"]
+                            , makeCommand "git" ["status"]
+                            ]
