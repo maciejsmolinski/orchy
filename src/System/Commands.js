@@ -1,28 +1,46 @@
-var spawnSync = require('child_process').spawnSync;
+var spawnSync = require("child_process").spawnSync;
 
+function run(command, args) {
+    var process = spawnSync(command, args);
+    var output;
+    var program;
 
+    if (process.status === 0) {
+        output = process.stdout ? process.stdout.toString().trim() : "";
 
-exports.syncExec_ = function(success, error) {
+        return [true, output];
+    }
+
+    program = [command].concat(args).join(" ");
+
+    return [
+        false,
+        'Program "' +
+        program +
+        '" exited with code "' +
+        (process.error && process.error.code) +
+        '" and status "' +
+        process.status +
+        '"'
+    ];
+}
+
+exports.syncExec_ = function(right, left) {
     return function(command, args) {
         return function() {
-            var process = spawnSync(command, args);
-            var output;
-            var program;
+            var result = run(command, args);
 
-            if (process.status === 0) {
-                output = process.stdout
-                    ? process.stdout.toString().trim()
-                    : '';
+            return result[0] ? right(result[1]) : left(result[1]);
+        };
+    };
+};
 
-                return success(output);
-            }
+exports.asyncExec_ = function(right, left, canceler, cb, command, args) {
+    setTimeout(function() {
+        var result = run(command, args);
 
-            program = [command].concat(args).join(' ')
+        cb(result[0] ? right(right(result[1])) : left(result[1]))();
+    });
 
-            return error(
-                'Program "' + program + '" exited with code "' + process.error.code + '"'
-            );
-
-        }
-    }
-}
+    return canceler;
+};

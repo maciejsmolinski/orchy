@@ -11,6 +11,7 @@ You can edit this file as you like.
     , "generics-rep"
     , "arrays"
     , "functions"
+    , "aff"
     ]
 , packages =
     ./packages.dhall
