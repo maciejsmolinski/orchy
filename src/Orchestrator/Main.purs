@@ -17,7 +17,6 @@ import Effect (Effect)
 import Effect.Aff (Aff, launchAff_)
 import Effect.Class (liftEffect)
 import Effect.Console (log)
-import Simple.JSON as SimpleJSON
 import System.Commands (asyncExec)
 
 type Program = String

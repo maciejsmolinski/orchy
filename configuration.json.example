@@ -1,0 +1,6 @@
+{
+    "commands": [
+        "pwd",
+        "echo 'success'"
+    ]
+}
