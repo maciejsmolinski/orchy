@@ -12,7 +12,10 @@ import Orchestrator.Main (runDefinition)
 main :: Effect Unit
 main = do
   configuration <- read "configuration.json"
-  case (fromJSON <$> configuration) of
+  case configuration of
     (Left _) -> warn "⚠ Failure reading configuration.json"
-    (Right definition) -> do
-      runDefinition definition
+    (Right contents) -> do
+      parsed <- pure $ fromJSON contents
+      case parsed of
+        (Left error) -> warn $ "⚠ " <> error
+        (Right definition) -> runDefinition definition

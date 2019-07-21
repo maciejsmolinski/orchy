@@ -5,9 +5,11 @@ import Control.Bind (bind, discard, (>>=))
 import Control.Monad.Error.Class (try)
 import Data.Array ((:))
 import Data.Either (Either(..))
+import Data.Eq (class Eq)
 import Data.Foldable (foldl)
 import Data.Function (($))
 import Data.Generic.Rep (class Generic)
+import Data.Generic.Rep.Eq (genericEq)
 import Data.Generic.Rep.Show (genericShow)
 import Data.Semigroup ((<>))
 import Data.Show (class Show, show)
@@ -35,6 +37,12 @@ instance showCommand :: Show Command where
 
 instance showDefinition :: Show Definition where
   show = genericShow
+
+instance eqCommand :: Eq Command where
+  eq = genericEq
+
+instance eqDefinition :: Eq Definition where
+  eq = genericEq
 
 makeCommand :: Program -> Args -> Command
 makeCommand program args = Command program args
