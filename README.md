@@ -13,15 +13,16 @@ $ spago run --watch
 
 ## Defining and executing a plan
 
-```purescript
-main :: Effect Unit
-main = runDefinition definition
+Create a `configuration.json` file with the following contents:
 
-definition :: Definition
-definition = makeDefinition [ makeCommand "pwd" []
-                            , makeCommand "git" ["branch"]
-                            , makeCommand "git" ["status"]
-                            ]
+```json
+{
+    "commands": [
+        "pwd",
+        "git branch",
+        "git status"
+    ]
+}
 ```
 
 when all commands succeed:
