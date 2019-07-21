@@ -14,6 +14,7 @@ You can edit this file as you like.
     , "aff"
     , "simple-json"
     , "strings"
+    , "spec"
     ]
 , packages =
     ./packages.dhall
