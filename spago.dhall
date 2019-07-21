@@ -12,6 +12,7 @@ You can edit this file as you like.
     , "arrays"
     , "functions"
     , "aff"
+    , "simple-json"
     ]
 , packages =
     ./packages.dhall

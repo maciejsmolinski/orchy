@@ -1,7 +1,5 @@
 module Orchestrator.Main (makeCommand, makeDefinition, runDefinition, Definition, Command) where
 
-
-
 import Control.Applicative (pure)
 import Control.Bind (bind, discard, (>>=))
 import Control.Monad.Error.Class (try)
@@ -19,11 +17,11 @@ import Effect (Effect)
 import Effect.Aff (Aff, launchAff_)
 import Effect.Class (liftEffect)
 import Effect.Console (log)
+import Simple.JSON as SimpleJSON
 import System.Commands (asyncExec)
 
 type Program = String
 type Args = Array String
-
 data Command = Command Program Args
 
 data Definition = Definition { commands :: Array Command
@@ -38,6 +36,9 @@ instance showCommand :: Show Command where
 
 instance showDefinition :: Show Definition where
   show = genericShow
+
+instance readForeignDefinition :: SimpleJSON.ReadForeign Definition where
+  readImpl f = pure $ makeDefinition []
 
 makeCommand :: Program -> Args -> Command
 makeCommand program args = Command program args
