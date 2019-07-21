@@ -13,6 +13,7 @@ You can edit this file as you like.
     , "functions"
     , "aff"
     , "simple-json"
+    , "strings"
     ]
 , packages =
     ./packages.dhall

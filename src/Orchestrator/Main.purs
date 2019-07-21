@@ -37,9 +37,6 @@ instance showCommand :: Show Command where
 instance showDefinition :: Show Definition where
   show = genericShow
 
-instance readForeignDefinition :: SimpleJSON.ReadForeign Definition where
-  readImpl f = pure $ makeDefinition []
-
 makeCommand :: Program -> Args -> Command
 makeCommand program args = Command program args
 
