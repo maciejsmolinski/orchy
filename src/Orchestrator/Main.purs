@@ -1,4 +1,4 @@
-module Orchestrator.Main (makeCommand, makeDefinition, runDefinition, Definition, Command) where
+module Orchestrator.Main (makeId, makeCommand, makeDefinition, runDefinition, Definition, Command, Id) where
 
 import Control.Applicative (pure)
 import Control.Bind (bind, discard, (>>=))
@@ -23,14 +23,20 @@ import System.Commands (asyncExec)
 
 type Program = String
 type Args = Array String
+newtype Id = Id String
 data Command = Command Program Args
 
-data Definition = Definition { commands :: Array Command
+data Definition = Definition { id :: Id
+                             , commands :: Array Command
                              }
+derive instance genericId :: Generic Id _
 
 derive instance genericCommand :: Generic Command _
 
 derive instance genericDefinition :: Generic Definition _
+
+instance showId :: Show Id where
+  show = genericShow
 
 instance showCommand :: Show Command where
   show = genericShow
@@ -38,17 +44,23 @@ instance showCommand :: Show Command where
 instance showDefinition :: Show Definition where
   show = genericShow
 
+instance eqId :: Eq Id where
+  eq = genericEq
+
 instance eqCommand :: Eq Command where
   eq = genericEq
 
 instance eqDefinition :: Eq Definition where
   eq = genericEq
 
+makeId :: String -> Id
+makeId id = Id id
+
 makeCommand :: Program -> Args -> Command
 makeCommand program args = Command program args
 
-makeDefinition :: Array Command -> Definition
-makeDefinition commands = Definition { commands }
+makeDefinition :: Id -> Array Command -> Definition
+makeDefinition id commands = Definition { id, commands }
 
 runDefinition :: Definition -> Effect Unit
 runDefinition (Definition { commands }) = execCommands commands

@@ -8,11 +8,13 @@ import Data.Functor (map)
 import Data.Maybe (maybe)
 import Data.String (Pattern(..), split)
 import Foreign (MultipleErrors)
-import Orchestrator.Main (Command, Definition, makeCommand, makeDefinition)
+import Orchestrator.Main (Command, Definition, makeCommand, makeDefinition, makeId)
 import Simple.JSON as SimpleJSON
 
 type JSONCommand = String
-type JSONDefinition = { commands :: Array JSONCommand }
+type JSONDefinition =
+  { id :: String
+  , commands :: Array JSONCommand }
 
 fromJSON :: String -> Either String Definition
 fromJSON text = value
@@ -23,7 +25,7 @@ fromJSON text = value
     value :: Either String Definition
     value = case result of
       (Left _) -> Left "Configuration file is not structured properly"
-      (Right json) -> pure $ makeDefinition $ map stringToCommand json.commands
+      (Right json) -> pure $ makeDefinition (makeId json.id) (map stringToCommand json.commands)
 
 stringToCommand :: String -> Command
 stringToCommand text = makeCommand program args
