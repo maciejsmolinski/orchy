@@ -1,6 +1,9 @@
 {
+    "id": "first-definition",
+    "dir": ".",
     "commands": [
         "pwd",
-        "echo 'success'"
+        "git branch",
+        "git status"
     ]
 }

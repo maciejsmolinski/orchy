@@ -17,6 +17,8 @@ Create a `configuration.json` file with the following contents:
 
 ```json
 {
+    "id": "first-definition",
+    "dir": ".",
     "commands": [
         "pwd",
         "git branch",
