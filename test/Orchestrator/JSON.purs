@@ -19,7 +19,7 @@ main ::  Spec Unit
 main = do
   describe "fromJSON" do
     it "should return early when provided with incorrect structure" do
-      fromJSON incorrect `shouldEqual` Left "Incorrect JSON structure provided"
+      fromJSON incorrect `shouldEqual` Left "Configuration file is not structured properly"
 
     it "should return a definition when correct structure is provided" do
       fromJSON correct `shouldEqual` (Right $ makeDefinition [ makeCommand "git" ["status"] ])

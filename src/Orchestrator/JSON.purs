@@ -22,7 +22,7 @@ fromJSON text = value
 
     value :: Either String Definition
     value = case result of
-      (Left _) -> Left "Incorrect JSON structure provided"
+      (Left _) -> Left "Configuration file is not structured properly"
       (Right json) -> pure $ makeDefinition $ map stringToCommand json.commands
 
 stringToCommand :: String -> Command
