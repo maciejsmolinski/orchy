@@ -18,7 +18,7 @@ import Data.Unit (Unit, unit)
 import Effect (Effect)
 import Effect.Aff (Aff, launchAff_)
 import Effect.Class (liftEffect)
-import Effect.Console (log)
+import Logger as Logger
 import System.Commands (asyncExec)
 
 type Program = String
@@ -58,21 +58,20 @@ runDefinition (Definition { commands }) = execCommands commands
 
     annotate :: Command -> Aff Command
     annotate command@(Command program args) = do
-      liftEffect $ log $ "* Running" <> (showPretty (program : args))
+      liftEffect $ Logger.log $ "Executing" <> (showPretty (program : args))
       pure command
 
     run :: Command -> Aff (Either String String)
     run (Command program args) = asyncExec program args
 
     logOutput :: Either String String -> Aff Unit
-    logOutput value = liftEffect $ log $ "-> " <> (show value)
+    logOutput value = liftEffect $ Logger.dump $ show value
 
     execCommands :: Array Command -> Effect Unit
     execCommands items =
       launchAff_ do
-        liftEffect $ log "Executing"
         result <- try $ traverse_ (\command -> (annotate command) >>= run >>= logOutput) items
         case result of
-          (Left _) -> (liftEffect $ log "Execution FAILED")
-          (Right _) -> (liftEffect $ log "Execution SUCCEEDED")
+          (Left _) -> (liftEffect $ Logger.error "Execution FAILED")
+          (Right _) -> (liftEffect $ Logger.log "Execution SUCCEEDED")
         pure unit
