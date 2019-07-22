@@ -17,14 +17,16 @@ Create a `configuration.json` file with the following contents:
 
 ```json
 {
-    "id": "first-definition",
+    "id": "first",
     "dir": ".",
+    "secret": "secret",
     "commands": [
         "pwd",
         "git branch",
         "git status"
     ]
 }
+
 ```
 
 when all commands succeed:

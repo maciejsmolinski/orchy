@@ -1,4 +1,4 @@
-module Orchestrator.Main (makeId, makeDir, makeCommand, makeDefinition, runDefinition, Definition, Command, Id, Dir) where
+module Orchestrator.Main (makeId, makeSecret, makeDir, makeCommand, makeDefinition, runDefinition, Definition, Command, Id, Secret, Dir) where
 
 import Control.Applicative (pure)
 import Control.Bind (bind, discard, (>>=))
@@ -24,15 +24,19 @@ import System.Commands (asyncExec)
 type Program = String
 type Args = Array String
 newtype Id = Id String
+newtype Secret = Secret String
 newtype Dir = Dir String
 data Command = Command Program Args
 
 data Definition = Definition { id :: Id
+                             , secret :: Secret
                              , dir :: Dir
                              , commands :: Array Command
                              }
 
 derive instance genericId :: Generic Id _
+
+derive instance genericSecret :: Generic Secret _
 
 derive instance genericDir :: Generic Dir _
 
@@ -41,6 +45,9 @@ derive instance genericCommand :: Generic Command _
 derive instance genericDefinition :: Generic Definition _
 
 instance showId :: Show Id where
+  show = genericShow
+
+instance showSecret :: Show Secret where
   show = genericShow
 
 instance showDir :: Show Dir where
@@ -55,6 +62,9 @@ instance showDefinition :: Show Definition where
 instance eqId :: Eq Id where
   eq = genericEq
 
+instance eqSecret :: Eq Secret where
+  eq = genericEq
+
 instance eqDir :: Eq Dir where
   eq = genericEq
 
@@ -67,14 +77,17 @@ instance eqDefinition :: Eq Definition where
 makeId :: String -> Id
 makeId id = Id id
 
+makeSecret :: String -> Secret
+makeSecret secret = Secret secret
+
 makeDir :: String -> Dir
 makeDir dir = Dir dir
 
 makeCommand :: Program -> Args -> Command
 makeCommand program args = Command program args
 
-makeDefinition :: Id -> Dir -> Array Command -> Definition
-makeDefinition id dir commands = Definition { id, dir, commands }
+makeDefinition :: Id -> Secret -> Dir -> Array Command -> Definition
+makeDefinition id secret dir commands = Definition { id, secret, dir, commands }
 
 runDefinition :: Definition -> Effect Unit
 runDefinition (Definition { commands }) = execCommands commands

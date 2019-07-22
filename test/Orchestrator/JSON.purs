@@ -4,13 +4,13 @@ import Data.Either (Either(..))
 import Data.Function (($))
 import Data.Unit (Unit)
 import Orchestrator.JSON (fromJSON)
-import Orchestrator.Main (makeCommand, makeDefinition, makeDir, makeId)
+import Orchestrator.Main (makeCommand, makeDefinition, makeDir, makeId, makeSecret)
 import Prelude (discard)
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual)
 
 correct :: String
-correct = """{ "id": "first", "dir": ".", "commands": ["git status"] }"""
+correct = """{ "id": "first", "secret": "secret", "dir": ".", "commands": ["git status"] }"""
 
 incorrect :: String
 incorrect = """{ "command": "git status" }"""
@@ -22,4 +22,4 @@ main = do
       fromJSON incorrect `shouldEqual` Left "Configuration file is not structured properly"
 
     it "should return a definition when correct structure is provided" do
-      fromJSON correct `shouldEqual` (Right $ makeDefinition (makeId "first") (makeDir ".") [ makeCommand "git" ["status"] ])
+      fromJSON correct `shouldEqual` (Right $ makeDefinition (makeId "first") (makeSecret "secret") (makeDir ".") [ makeCommand "git" ["status"] ])
