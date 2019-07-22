@@ -1,4 +1,4 @@
-module Orchestrator.Main (makeId, makeCommand, makeDefinition, runDefinition, Definition, Command, Id) where
+module Orchestrator.Main (makeId, makeDir, makeCommand, makeDefinition, runDefinition, Definition, Command, Id, Dir) where
 
 import Control.Applicative (pure)
 import Control.Bind (bind, discard, (>>=))
@@ -24,18 +24,26 @@ import System.Commands (asyncExec)
 type Program = String
 type Args = Array String
 newtype Id = Id String
+newtype Dir = Dir String
 data Command = Command Program Args
 
 data Definition = Definition { id :: Id
+                             , dir :: Dir
                              , commands :: Array Command
                              }
+
 derive instance genericId :: Generic Id _
+
+derive instance genericDir :: Generic Dir _
 
 derive instance genericCommand :: Generic Command _
 
 derive instance genericDefinition :: Generic Definition _
 
 instance showId :: Show Id where
+  show = genericShow
+
+instance showDir :: Show Dir where
   show = genericShow
 
 instance showCommand :: Show Command where
@@ -47,6 +55,9 @@ instance showDefinition :: Show Definition where
 instance eqId :: Eq Id where
   eq = genericEq
 
+instance eqDir :: Eq Dir where
+  eq = genericEq
+
 instance eqCommand :: Eq Command where
   eq = genericEq
 
@@ -56,11 +67,14 @@ instance eqDefinition :: Eq Definition where
 makeId :: String -> Id
 makeId id = Id id
 
+makeDir :: String -> Dir
+makeDir dir = Dir dir
+
 makeCommand :: Program -> Args -> Command
 makeCommand program args = Command program args
 
-makeDefinition :: Id -> Array Command -> Definition
-makeDefinition id commands = Definition { id, commands }
+makeDefinition :: Id -> Dir -> Array Command -> Definition
+makeDefinition id dir commands = Definition { id, dir, commands }
 
 runDefinition :: Definition -> Effect Unit
 runDefinition (Definition { commands }) = execCommands commands
