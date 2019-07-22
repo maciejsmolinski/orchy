@@ -1,6 +1,6 @@
-var spawnSync = require("child_process").spawnSync;
-
 function run(command, args) {
+    var spawnSync = require("child_process").spawnSync;
+
     var process = spawnSync(command, args);
     var output;
     var program;
