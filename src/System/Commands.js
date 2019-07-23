@@ -25,17 +25,15 @@ function run(command, args, options) {
     ];
 }
 
-exports.syncExec_ = function(right, left) {
-    return function(command, args) {
-        return function() {
-            var result = run(command, args);
-
-            return result[0] ? right(result[1]) : left(result[1]);
-        };
-    };
-};
-
-exports.asyncExec_ = function(right, left, canceler, cb, command, args, options) {
+exports.asyncExec_ = function(
+    right,
+    left,
+    canceler,
+    cb,
+    command,
+    args,
+    options
+) {
     setTimeout(function() {
         var result = run(command, args, options);
 
