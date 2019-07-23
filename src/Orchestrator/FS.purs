@@ -1,4 +1,4 @@
-module Orchestrator.FS (read) where
+module Orchestrator.FS (readFile) where
 
 import Data.Either (Either(..))
 import Data.Function.Uncurried (Fn3, runFn3)
@@ -16,5 +16,5 @@ foreign import readFile_
   FilePath
   (Effect Result)
 
-read :: FilePath -> Effect Result
-read path = runFn3 readFile_ Left Right path
+readFile :: FilePath -> Effect Result
+readFile path = runFn3 readFile_ Left Right path
