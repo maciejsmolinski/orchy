@@ -1,7 +1,7 @@
-function run(command, args) {
+function run(command, args, options) {
     var spawnSync = require("child_process").spawnSync;
 
-    var process = spawnSync(command, args);
+    var process = spawnSync(command, args, options || {});
     var output;
     var program;
 
@@ -35,9 +35,9 @@ exports.syncExec_ = function(right, left) {
     };
 };
 
-exports.asyncExec_ = function(right, left, canceler, cb, command, args) {
+exports.asyncExec_ = function(right, left, canceler, cb, command, args, options) {
     setTimeout(function() {
-        var result = run(command, args);
+        var result = run(command, args, options);
 
         cb(result[0] ? right(right(result[1])) : left(result[1]))();
     });

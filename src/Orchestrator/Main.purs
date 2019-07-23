@@ -90,7 +90,7 @@ makeDefinition :: Id -> Secret -> Dir -> Array Command -> Definition
 makeDefinition id secret dir commands = Definition { id, secret, dir, commands }
 
 runDefinition :: Definition -> Effect Unit
-runDefinition (Definition { commands }) = execCommands commands
+runDefinition (Definition { dir, commands }) = execCommands dir commands
   where
     showPretty :: Array String -> String
     showPretty args = foldl (\a b -> a <> " " <> b) "" args
@@ -100,16 +100,16 @@ runDefinition (Definition { commands }) = execCommands commands
       liftEffect $ Logger.log $ "Executing" <> (showPretty (program : args))
       pure command
 
-    run :: Command -> Aff (Either String String)
-    run (Command program args) = asyncExec program args
+    run :: Dir -> Command -> Aff (Either String String)
+    run (Dir cwd) (Command program args) = asyncExec program args { cwd }
 
     logOutput :: Either String String -> Aff Unit
     logOutput value = liftEffect $ Logger.dump $ show value
 
-    execCommands :: Array Command -> Effect Unit
-    execCommands items =
+    execCommands :: Dir -> Array Command -> Effect Unit
+    execCommands cwd items =
       launchAff_ do
-        result <- try $ traverse_ (\command -> (annotate command) >>= run >>= logOutput) items
+        result <- try $ traverse_ (\command -> (annotate command) >>= run cwd >>= logOutput) items
         case result of
           (Left _) -> (liftEffect $ Logger.error "Execution FAILED")
           (Right _) -> (liftEffect $ Logger.log "Execution SUCCEEDED")

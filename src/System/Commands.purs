@@ -1,11 +1,12 @@
 module System.Commands (syncExec, asyncExec) where
 
 import Data.Either (Either(..))
-import Data.Function.Uncurried (Fn2, Fn6, runFn2, runFn6)
+import Data.Function.Uncurried (Fn2, Fn7, runFn2, runFn7)
 import Data.Unit (Unit)
 import Effect (Effect)
 import Effect.Aff (Aff, Canceler, Error, makeAff, nonCanceler)
 
+type Options = { cwd :: String }
 type Program = String
 type Args = Array String
 type Success = String
@@ -23,14 +24,15 @@ syncExec :: Program -> Args -> Effect Result
 syncExec = runFn2 (runFn2 syncExec_ Right Left)
 
 foreign import asyncExec_
-  :: Fn6
+  :: Fn7
   (Success -> Result)
   (Failure -> Result)
   Canceler
   (Either Error Result -> Effect Unit)
   Program
   Args
+  Options
   (Effect Canceler)
 
-asyncExec :: Program -> Args -> Aff Result
-asyncExec program args = makeAff \cb -> runFn6 asyncExec_ Right Left nonCanceler cb program args
+asyncExec :: Program -> Args -> Options -> Aff Result
+asyncExec program args options = makeAff \cb -> runFn7 asyncExec_ Right Left nonCanceler cb program args options
