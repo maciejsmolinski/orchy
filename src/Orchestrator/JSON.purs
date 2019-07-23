@@ -11,12 +11,11 @@ import Foreign (MultipleErrors)
 import Orchestrator.Main (Command, Definition, makeCommand, makeDefinition, makeDir, makeId, makeSecret)
 import Simple.JSON as SimpleJSON
 
-type JSONCommand = String
 type JSONDefinition =
   { id :: String
   , secret :: String
   , dir :: String
-  , commands :: Array JSONCommand }
+  , commands :: Array String }
 
 fromJSON :: String -> Either String Definition
 fromJSON text = value
