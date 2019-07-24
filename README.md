@@ -10,6 +10,11 @@ $ spago install
 $ spago run --watch
 ```
 
+Running tests
+
+```
+spago test --watch
+```
 
 ## Defining and executing a plan
 
