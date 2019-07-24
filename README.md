@@ -35,11 +35,15 @@ when all commands succeed:
 $ spago run
 
 [Log] Executing pwd
-(Right "/Users/maciejsmolinski/git/orchestrator")
+/Users/maciejsmolinski/git/orchestrator
+
 [Log] Executing git branch
-(Right "* master")
+* master
+
 [Log] Executing git status
-(Right "On branch master\nnothing to commit, working tree clean")
+On branch master
+nothing to commit, working tree clean
+
 [Log] Execution SUCCEEDED
 ```
 
@@ -50,8 +54,11 @@ in case one of the commands fails:
 $ spago run
 
 [Log] Executing pwd
-(Right "/Users/maciejsmolinski/git/orchestrator")
-[Log] Executing make configure
+/Users/maciejsmolinski/git/orchestrator
+
+[Log] Executing git branch
+Program "git branch" exited with code "undefined" and status "128"
+
 [Err] Execution FAILED
 ```
 
@@ -60,7 +67,7 @@ when `configuration.json` file is missing:
 ```shell
 $ spago run
 
-[Err] ⚠ Failure reading configuration.json
+[Err] Failure reading configuration.json
 ```
 
 when `configuration.json` has a wrong format:
@@ -68,5 +75,5 @@ when `configuration.json` has a wrong format:
 ```shell
 $ spago run
 
-[Err] ⚠ Configuration file is not structured properly
+[Err] Configuration file is not structured properly
 ```
