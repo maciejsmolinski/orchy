@@ -1,6 +1,7 @@
 {
     "id": "first-definition",
     "dir": ".",
+    "secret": "secret",
     "commands": [
         "pwd",
         "git branch",
