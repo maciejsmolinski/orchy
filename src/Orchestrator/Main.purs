@@ -105,7 +105,7 @@ runDefinition (Definition { dir, commands }) = execCommands dir commands
 
     logOutput :: String -> Aff Unit
     logOutput value = do
-      liftEffect $ Logger.dump $ show value
+      liftEffect $ Logger.dump value
       liftEffect $ Logger.line
 
     execCommands :: Dir -> Array Command -> Effect Unit
