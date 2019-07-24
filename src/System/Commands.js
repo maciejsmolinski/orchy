@@ -37,7 +37,7 @@ exports.asyncExec_ = function(
     setTimeout(function() {
         var result = run(command, args, options);
 
-        cb(result[0] ? right(right(result[1])) : left(result[1]))();
+        cb(result[0] ? right(result[1]) : left(new Error(result[1])))();
     });
 
     return canceler;

@@ -10,20 +10,19 @@ type Options = { cwd :: String }
 type Program = String
 type Args = Array String
 type Success = String
-type Failure = String
 
-type Result = Either Failure Success
+type Result = Either Error Success
 
 foreign import asyncExec_
   :: Fn7
   (Success -> Result)
-  (Failure -> Result)
+  (Error -> Result)
   Canceler
-  (Either Error Result -> Effect Unit)
+  (Result -> Effect Unit)
   Program
   Args
   Options
   (Effect Canceler)
 
-asyncExec :: Program -> Args -> Options -> Aff Result
+asyncExec :: Program -> Args -> Options -> Aff String
 asyncExec program args options = makeAff \cb -> runFn7 asyncExec_ Right Left nonCanceler cb program args options

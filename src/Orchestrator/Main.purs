@@ -16,7 +16,7 @@ import Data.Show (class Show, show)
 import Data.Traversable (traverse_)
 import Data.Unit (Unit, unit)
 import Effect (Effect)
-import Effect.Aff (Aff, launchAff_)
+import Effect.Aff (Aff, launchAff_, message)
 import Effect.Class (liftEffect)
 import Logger as Logger
 import System.Commands (asyncExec)
@@ -100,17 +100,23 @@ runDefinition (Definition { dir, commands }) = execCommands dir commands
       liftEffect $ Logger.log $ "Executing" <> (showPretty (program : args))
       pure command
 
-    run :: Dir -> Command -> Aff (Either String String)
+    run :: Dir -> Command -> Aff String
     run (Dir cwd) (Command program args) = asyncExec program args { cwd }
 
-    logOutput :: Either String String -> Aff Unit
-    logOutput value = liftEffect $ Logger.dump $ show value
+    logOutput :: String -> Aff Unit
+    logOutput value = do
+      liftEffect $ Logger.dump $ show value
+      liftEffect $ Logger.line
 
     execCommands :: Dir -> Array Command -> Effect Unit
     execCommands cwd items =
       launchAff_ do
         result <- try $ traverse_ (\command -> (annotate command) >>= run cwd >>= logOutput) items
         case result of
-          (Left _) -> (liftEffect $ Logger.error "Execution FAILED")
-          (Right _) -> (liftEffect $ Logger.log "Execution SUCCEEDED")
+          (Left a) -> do
+            liftEffect $ Logger.dump $ message a
+            liftEffect $ Logger.line
+            liftEffect $ Logger.error "Execution FAILED"
+          (Right _) -> do
+            liftEffect $ Logger.log "Execution SUCCEEDED"
         pure unit
