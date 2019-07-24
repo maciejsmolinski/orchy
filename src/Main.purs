@@ -13,9 +13,9 @@ main :: Effect Unit
 main = do
   configuration <- readFile "configuration.json"
   case configuration of
-    (Left _) -> Logger.error "⚠ Failure reading configuration.json"
+    (Left _) -> Logger.error "Failure reading configuration.json"
     (Right contents) -> do
       parsed <- pure $ fromJSON contents
       case parsed of
-        (Left error) -> Logger.error $ "⚠ " <> error
+        (Left error) -> Logger.error error
         (Right definition) -> runDefinition definition
