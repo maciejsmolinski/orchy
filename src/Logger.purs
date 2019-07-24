@@ -1,4 +1,4 @@
-module Logger (log, error, dump) where
+module Logger (log, error, dump, line) where
 
 import Prelude
 
@@ -9,6 +9,9 @@ data Format
   = Log
   | Error
   | Dump
+
+line :: Effect Unit
+line = Console.log ""
 
 log :: String -> Effect Unit
 log = Console.log <<< format Log
