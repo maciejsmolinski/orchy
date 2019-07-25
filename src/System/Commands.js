@@ -15,13 +15,7 @@ function run(command, args, options) {
 
     return [
         false,
-        'Program "' +
-        program +
-        '" exited with code "' +
-        (process.error && process.error.code) +
-        '" and status "' +
-        process.status +
-        '"'
+        '' + process.stderr + 'Process exited with status code ' + process.status
     ];
 }
 

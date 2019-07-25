@@ -62,7 +62,8 @@ $ spago run
 /Users/maciejsmolinski/git/orchestrator
 
 [Log] Executing git branch
-Program "git branch" exited with code "undefined" and status "128"
+fatal: not a git repository (or any of the parent directories): .git
+Process exited with status code 128
 
 [Err] Execution FAILED
 ```
