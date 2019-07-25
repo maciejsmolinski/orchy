@@ -3,15 +3,12 @@ function run(command, args, options) {
 
     var process = spawnSync(command, args, options || {});
     var output;
-    var program;
 
     if (process.status === 0) {
         output = process.stdout ? process.stdout.toString().trim() : "";
 
         return [true, output];
     }
-
-    program = [command].concat(args).join(" ");
 
     return [
         false,
