@@ -1,18 +1,19 @@
-module Orchestrator.Main (makeId, makeSecret, makeDir, makeCommand, makeDefinition, runDefinition, Definition, Command, Id, Secret, Dir) where
+module Orchestrator.Main (makeId, makeSecret, makeDir, makeCommand, makeDefinition, makeDefinitions, runDefinition, runDefinition', Definitions, Definition, Command, Id, Secret, Dir) where
 
 import Control.Applicative (pure)
 import Control.Bind (bind, discard, (>>=))
 import Control.Monad.Error.Class (try)
-import Data.Array ((:))
+import Data.Array (find, (:))
 import Data.Either (Either(..))
-import Data.Eq (class Eq)
+import Data.Eq (class Eq, (==))
 import Data.Foldable (foldl)
 import Data.Function (($))
 import Data.Generic.Rep (class Generic)
 import Data.Generic.Rep.Eq (genericEq)
 import Data.Generic.Rep.Show (genericShow)
+import Data.Maybe (Maybe(..))
 import Data.Semigroup ((<>))
-import Data.Show (class Show)
+import Data.Show (class Show, show)
 import Data.Traversable (traverse_)
 import Data.Unit (Unit, unit)
 import Effect (Effect)
@@ -34,6 +35,9 @@ data Definition = Definition { id :: Id
                              , commands :: Array Command
                              }
 
+data Definitions = Definitions { definitions :: Array Definition
+                               }
+
 derive instance genericId :: Generic Id _
 
 derive instance genericSecret :: Generic Secret _
@@ -43,6 +47,8 @@ derive instance genericDir :: Generic Dir _
 derive instance genericCommand :: Generic Command _
 
 derive instance genericDefinition :: Generic Definition _
+
+derive instance genericDefinitions :: Generic Definitions _
 
 instance showId :: Show Id where
   show = genericShow
@@ -57,6 +63,9 @@ instance showCommand :: Show Command where
   show = genericShow
 
 instance showDefinition :: Show Definition where
+  show = genericShow
+
+instance showDefinitions :: Show Definitions where
   show = genericShow
 
 instance eqId :: Eq Id where
@@ -74,6 +83,9 @@ instance eqCommand :: Eq Command where
 instance eqDefinition :: Eq Definition where
   eq = genericEq
 
+instance eqDefinitions :: Eq Definitions where
+  eq = genericEq
+
 makeId :: String -> Id
 makeId id = Id id
 
@@ -88,6 +100,21 @@ makeCommand program args = Command program args
 
 makeDefinition :: Id -> Secret -> Dir -> Array Command -> Definition
 makeDefinition id secret dir commands = Definition { id, secret, dir, commands }
+
+makeDefinitions :: Array Definition -> Definitions
+makeDefinitions definitions = Definitions { definitions }
+
+runDefinition' :: Id -> Definitions -> Effect Unit
+runDefinition' selectedId@(Id id) (Definitions { definitions }) = do
+  case maybeDefinition of
+    Nothing -> do
+      Logger.error $ "Definition with id \"" <> id <> "\" not found"
+    (Just definition) -> do
+      Logger.log $ "Running definition \"" <> id <> "\""
+      runDefinition definition
+  where
+    maybeDefinition :: Maybe Definition
+    maybeDefinition = find (\(Definition { id: definitionId }) -> definitionId == selectedId) definitions
 
 runDefinition :: Definition -> Effect Unit
 runDefinition (Definition { dir, commands }) = execCommands dir commands

@@ -7,7 +7,7 @@ import Effect (Effect)
 import Logger as Logger
 import Orchestrator.FS (readFile)
 import Orchestrator.JSON (fromJSON)
-import Orchestrator.Main (runDefinition)
+import Orchestrator.Main (Definitions, makeDefinitions, makeId, runDefinition, runDefinition')
 
 main :: Effect Unit
 main = do
@@ -18,4 +18,4 @@ main = do
       parsed <- pure $ fromJSON contents
       case parsed of
         (Left error) -> Logger.error error
-        (Right definition) -> runDefinition definition
+        (Right definition) -> runDefinition' (makeId "first-definition") (makeDefinitions [definition])
