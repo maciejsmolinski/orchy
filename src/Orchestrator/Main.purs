@@ -1,4 +1,4 @@
-module Orchestrator.Main (makeId, makeSecret, makeDir, makeCommand, makeDefinition, makeDefinitions, runDefinition, runDefinition', Definitions, Definition, Command, Id, Secret, Dir) where
+module Orchestrator.Main (makeId, makeSecret, makeDir, makeCommand, makeDefinition, makeDefinitions, runDefinition, runDefinitionWithId, Definitions, Definition, Command, Id, Secret, Dir) where
 
 import Control.Applicative (pure)
 import Control.Bind (bind, discard, (>>=))
@@ -13,7 +13,7 @@ import Data.Generic.Rep.Eq (genericEq)
 import Data.Generic.Rep.Show (genericShow)
 import Data.Maybe (Maybe(..))
 import Data.Semigroup ((<>))
-import Data.Show (class Show, show)
+import Data.Show (class Show)
 import Data.Traversable (traverse_)
 import Data.Unit (Unit, unit)
 import Effect (Effect)
@@ -104,8 +104,8 @@ makeDefinition id secret dir commands = Definition { id, secret, dir, commands }
 makeDefinitions :: Array Definition -> Definitions
 makeDefinitions definitions = Definitions { definitions }
 
-runDefinition' :: Id -> Definitions -> Effect Unit
-runDefinition' selectedId@(Id id) (Definitions { definitions }) = do
+runDefinitionWithId :: Id -> Definitions -> Effect Unit
+runDefinitionWithId selectedId@(Id id) (Definitions { definitions }) = do
   case maybeDefinition of
     Nothing -> do
       Logger.error $ "Definition with id \"" <> id <> "\" not found"

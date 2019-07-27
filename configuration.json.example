@@ -1,10 +1,12 @@
-{
-    "id": "first-definition",
-    "dir": ".",
-    "secret": "secret",
-    "commands": [
-        "pwd",
-        "git branch",
-        "git status"
-    ]
-}
+[
+    {
+        "id": "main",
+        "dir": ".",
+        "secret": "secret",
+        "commands": [
+            "pwd",
+            "git branch",
+            "git status"
+        ]
+    }
+]

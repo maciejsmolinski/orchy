@@ -21,17 +21,18 @@ spago test --watch
 Create a `configuration.json` file with the following contents:
 
 ```json
-{
-    "id": "first",
-    "dir": ".",
-    "secret": "secret",
-    "commands": [
-        "pwd",
-        "git branch",
-        "git status"
-    ]
-}
-
+[
+    {
+        "id": "main",
+        "dir": ".",
+        "secret": "secret",
+        "commands": [
+            "pwd",
+            "git branch",
+            "git status"
+        ]
+    }
+]
 ```
 
 when all commands succeed:
@@ -51,7 +52,6 @@ nothing to commit, working tree clean
 
 [Log] Execution SUCCEEDED
 ```
-
 
 in case one of the commands fails:
 
@@ -82,4 +82,12 @@ when `configuration.json` has a wrong format:
 $ spago run
 
 [Err] Configuration file is not structured properly
+```
+
+when `configuration.json` does not contain a "main" definition:
+
+```shell
+$ spago run
+
+[Err] Definition with id "main" not found
 ```
