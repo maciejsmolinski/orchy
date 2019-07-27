@@ -12,8 +12,8 @@ $ spago run --watch
 
 Running tests
 
-```
-spago test --watch
+```shell
+$ spago test --watch
 ```
 
 ## Defining and executing a plan
