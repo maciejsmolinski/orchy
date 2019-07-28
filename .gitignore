@@ -9,3 +9,4 @@
 /.psa*
 /.spago
 configuration.json
+index.js
