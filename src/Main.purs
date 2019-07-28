@@ -26,4 +26,4 @@ main = do
             Logger.log $ "[HTTP/GET] " <> route
             when (HTTPUtils.pathname route == "/run") do
               Logger.line
-              runDefinitionWithId (makeId "main") definitions
+              runDefinitionWithId (makeId (HTTPUtils.param "definition" route)) definitions
