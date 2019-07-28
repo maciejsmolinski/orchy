@@ -1,6 +1,6 @@
-# Orchestrator
+# Orchy
 
-🤹‍♂️A super simple, opinionated web hooks manager. Built with PureScript.
+🤹‍♂️A simple, opinionated web hooks manager. Built with PureScript.
 
 ## Running the server
 
@@ -77,7 +77,7 @@ $ spago run
 [Log] Running definition "main"
 
 [Log] Executing pwd
-/Users/maciejsmolinski/git/orchestrator
+/Users/maciejsmolinski/git/orchy
 
 [Log] Executing git branch
 fatal: not a git repository (or any of the parent directories): .git
@@ -96,7 +96,7 @@ $ spago run
 [Log] Running definition "main"
 
 [Log] Executing pwd
-/Users/maciejsmolinski/git/orchestrator
+/Users/maciejsmolinski/git/orchy
 
 [Log] Executing git branch
 * master
