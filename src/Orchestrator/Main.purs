@@ -111,6 +111,7 @@ runDefinitionWithId selectedId@(Id id) (Definitions { definitions }) = do
       Logger.error $ "Definition with id \"" <> id <> "\" not found"
     (Just definition) -> do
       Logger.log $ "Running definition \"" <> id <> "\""
+      Logger.line
       runDefinition definition
   where
     maybeDefinition :: Maybe Definition
