@@ -1,6 +1,5 @@
 module Orchestrator.JSON (fromJSON) where
 
-import Control.Applicative (pure)
 import Data.Array (head, tail)
 import Data.Either (Either(..))
 import Data.Foldable (foldl)
@@ -25,7 +24,7 @@ type JSONDefinitions = Array JSONDefinition
 fromJSON :: String -> Either String Definitions
 fromJSON text = case (SimpleJSON.readJSON text :: Either MultipleErrors JSONDefinitions) of
   (Left errors) -> Left $ messages errors
-  (Right json) -> pure $ makeDefinitions $ map toDefinition json
+  (Right json) -> Right $ makeDefinitions $ map toDefinition json
  where
     messages :: MultipleErrors -> String
     messages errors = trim $ foldl (\a b -> a <> " " <> b) "" $ map renderForeignError $ toList errors
