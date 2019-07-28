@@ -6,8 +6,8 @@
 
 ```shell
 $ npm install -g spago purescript@0.13.2
-$ spago install
-$ spago run --watch
+$ spago bundle-app -w
+$ npx nodemon index.js
 ```
 
 Running tests
