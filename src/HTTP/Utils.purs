@@ -1,3 +1,17 @@
-module HTTP.Utils (pathname) where
+module HTTP.Utils (pathname, Path, param) where
 
-foreign import pathname :: String -> String
+import Data.Function.Uncurried (Fn2, runFn2)
+
+type Param = String
+type Path = String
+
+foreign import pathname :: Path -> String
+
+foreign import param_
+  :: Fn2
+     Param
+     Path
+     String
+
+param :: Param -> Path -> String
+param = runFn2 param_
