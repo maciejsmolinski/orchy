@@ -1,0 +1,9 @@
+src
+.spago
+output
+configuration.json
+configuration.json.example
+Makefile
+packages.dhall
+spago.dhall
+test
