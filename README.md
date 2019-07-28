@@ -82,6 +82,7 @@ when `configuration.json` has a wrong format:
 $ spago run
 
 [Err] Configuration file is not structured properly
+Error at array index 0: Error at property "commands": Type mismatch: expected array, found Undefined
 ```
 
 when `configuration.json` does not contain a "main" definition:

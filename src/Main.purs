@@ -17,5 +17,5 @@ main = do
     (Right contents) -> do
       parsed <- pure $ fromJSON contents
       case parsed of
-        (Left error) -> Logger.error error
+        (Left error) -> Logger.error $ "Configuration file is not structured properly" <> "\n" <> error
         (Right definitions) -> runDefinitionWithId (makeId "main") definitions

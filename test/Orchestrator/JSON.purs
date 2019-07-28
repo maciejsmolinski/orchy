@@ -1,6 +1,6 @@
 module Test.Orchestrator.JSON (main) where
 
-import Data.Either (Either(..))
+import Data.Either (Either(..), isLeft)
 import Data.Function (($))
 import Data.Unit (Unit)
 import Orchestrator.JSON (fromJSON)
@@ -19,7 +19,7 @@ main ::  Spec Unit
 main = do
   describe "fromJSON" do
     it "should return early when provided with incorrect structure" do
-      fromJSON incorrect `shouldEqual` Left "Configuration file is not structured properly"
+      (isLeft $ fromJSON incorrect) `shouldEqual` true
 
     it "should return definitions when correct structure is provided" do
       fromJSON correct `shouldEqual` (Right $ makeDefinitions [makeDefinition (makeId "first") (makeSecret "secret") (makeDir ".") [ makeCommand "git" ["status"] ]])

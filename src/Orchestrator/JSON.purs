@@ -3,12 +3,15 @@ module Orchestrator.JSON (fromJSON) where
 import Control.Applicative (pure)
 import Data.Array (head, tail)
 import Data.Either (Either(..))
+import Data.Foldable (foldl)
 import Data.Function (identity, ($))
 import Data.Functor (map)
+import Data.List.NonEmpty (toList)
 import Data.Maybe (maybe)
-import Data.String (Pattern(..), split)
-import Foreign (MultipleErrors)
-import Orchestrator.Main (Command, Definitions, makeCommand, makeDefinition, makeDefinitions, makeDir, makeId, makeSecret)
+import Data.Monoid ((<>))
+import Data.String (Pattern(..), split, trim)
+import Foreign (MultipleErrors, renderForeignError)
+import Orchestrator.Main (Command, Definition, Definitions, makeCommand, makeDefinition, makeDefinitions, makeDir, makeId, makeSecret)
 import Simple.JSON as SimpleJSON
 
 type JSONDefinition =
@@ -20,15 +23,15 @@ type JSONDefinition =
 type JSONDefinitions = Array JSONDefinition
 
 fromJSON :: String -> Either String Definitions
-fromJSON text = value
+fromJSON text = case (SimpleJSON.readJSON text :: Either MultipleErrors JSONDefinitions) of
+  (Left errors) -> Left $ messages errors
+  (Right json) -> pure $ makeDefinitions $ map toDefinition json
  where
-    result :: Either MultipleErrors JSONDefinitions
-    result = SimpleJSON.readJSON text
+    messages :: MultipleErrors -> String
+    messages errors = trim $ foldl (\a b -> a <> " " <> b) "" $ map renderForeignError $ toList errors
 
-    value :: Either String Definitions
-    value = case result of
-      (Left _) -> Left "Configuration file is not structured properly"
-      (Right json) -> pure $ makeDefinitions $ map (\definition -> makeDefinition (makeId definition.id) (makeSecret definition.secret) (makeDir definition.dir) (map stringToCommand definition.commands)) json
+toDefinition :: JSONDefinition -> Definition
+toDefinition definition = makeDefinition (makeId definition.id) (makeSecret definition.secret) (makeDir definition.dir) (map stringToCommand definition.commands)
 
 stringToCommand :: String -> Command
 stringToCommand text = makeCommand program args
