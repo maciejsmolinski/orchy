@@ -2,21 +2,16 @@
 
 🤹‍♂️A super simple, opinionated web hooks manager. Built with PureScript.
 
-## Local development
+## Running the server
 
 ```shell
 $ npm install -g spago purescript@0.13.2
-$ spago bundle-app -w
-$ npx nodemon index.js
+$ spago run
 ```
 
-Running tests
+The web hooks server will run under [http://localhost:8181](http://localhost:8181)
 
-```shell
-$ spago test --watch
-```
-
-## Defining and executing a plan
+## Configuring hooks
 
 Create a `configuration.json` file with the following contents:
 
@@ -35,28 +30,51 @@ Create a `configuration.json` file with the following contents:
 ]
 ```
 
-when all commands succeed:
+To execute the `main` configuration, open [http://localhost:8181/run?definition=main](http://localhost:8181/run?definition=main) in your browser or run the following in terminal
 
-```shell
-$ spago run
-
-[Log] Executing pwd
-/Users/maciejsmolinski/git/orchestrator
-
-[Log] Executing git branch
-* master
-
-[Log] Executing git status
-On branch master
-nothing to commit, working tree clean
-
-[Log] Execution SUCCEEDED
+```
+$ curl http://localhost:8181/run?definition=main
 ```
 
-in case one of the commands fails:
+while the browser will show only the `success` message, the server will give you more feedback
+
+## Feedback
+
+When `configuration.json` file is missing:
 
 ```shell
 $ spago run
+
+[Err] Failure reading configuration.json
+```
+
+When `configuration.json` has a wrong format:
+
+```shell
+$ spago run
+
+[Err] Configuration file is not structured properly
+Error at array index 0: Error at property "commands": Type mismatch: expected array, found Undefined
+```
+
+When selected definition is not present in the configuration:
+
+```shell
+$ spago run
+
+[Log] [HTTP/GET] /run?definition=unknown
+
+[Err] Definition with id "unknown" not found
+```
+
+When definition exists but one of the commands fails:
+
+```shell
+$ spago run
+
+[Log] [HTTP/GET] /run?definition=main
+
+[Log] Running definition "main"
 
 [Log] Executing pwd
 /Users/maciejsmolinski/git/orchestrator
@@ -68,27 +86,37 @@ Process exited with status code 128
 [Err] Execution FAILED
 ```
 
-when `configuration.json` file is missing:
+Finally, when everything succeeds:
 
 ```shell
 $ spago run
 
-[Err] Failure reading configuration.json
+[Log] [HTTP/GET] /run?definition=main
+
+[Log] Running definition "main"
+
+[Log] Executing pwd
+/Users/maciejsmolinski/git/orchestrator
+
+[Log] Executing git branch
+* master
+
+[Log] Executing git status
+On branch server
+nothing to commit, working tree clean
+
+[Log] Execution SUCCEEDED
 ```
 
-when `configuration.json` has a wrong format:
+## Local development
 
 ```shell
-$ spago run
-
-[Err] Configuration file is not structured properly
-Error at array index 0: Error at property "commands": Type mismatch: expected array, found Undefined
+$ spago bundle-app -w
+$ npx nodemon index.js
 ```
 
-when `configuration.json` does not contain a "main" definition:
+Running tests
 
 ```shell
-$ spago run
-
-[Err] Definition with id "main" not found
+$ spago test --watch
 ```
