@@ -31,6 +31,9 @@ Now, run the orchy server under [http://localhost:8181](http://localhost:8181)
 
 ```shell
 $ orchy
+
+# To run it on a different port:
+$ PORT=8282 orchy
 ```
 
 To execute the `main` configuration, open [http://localhost:8181/run?definition=main](http://localhost:8181/run?definition=main) in your browser or run the following in terminal
