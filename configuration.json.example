@@ -2,7 +2,7 @@
     {
         "id": "main",
         "dir": ".",
-        "secret": "secret",
+        "secret": "secret-token",
         "commands": [
             "pwd",
             "git branch",

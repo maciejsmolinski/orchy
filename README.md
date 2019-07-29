@@ -17,7 +17,7 @@ Create a `configuration.json` file with the following contents:
     {
         "id": "main",
         "dir": ".",
-        "secret": "secret",
+        "secret": "secret-token",
         "commands": [
             "pwd",
             "git branch",
@@ -31,15 +31,18 @@ Now, run the orchy server under [http://localhost:8181](http://localhost:8181)
 
 ```shell
 $ orchy
+```
 
-# To run it on a different port:
+To run it on a different port:
+
+```
 $ PORT=8282 orchy
 ```
 
-To execute the `main` configuration, open [http://localhost:8181/run?definition=main](http://localhost:8181/run?definition=main) in your browser or run the following in terminal
+To execute the `main` configuration, open [http://localhost:8181/run?definition=main&secret=secret-token](http://localhost:8181/run?definition=main&secret=secret-token) in your browser or run the following in terminal
 
 ```
-$ curl http://localhost:8181/run?definition=main
+$ curl "http://localhost:8181/run?definition=main&secret=secret-token"
 ```
 
 while the browser will show only a `success` message, the server will give you more feedback
@@ -70,9 +73,9 @@ $ orchy
 
 [Log] Orchy server is running on http://localhost:8181
 
-[Log] [HTTP/GET] /run?definition=unknown
+[Log] [HTTP/GET] /run?definition=unknown&secret=unknown
 
-[Err] Definition with id "unknown" not found
+[Err] Definition with provided id and secret not found
 ```
 
 When definition exists but one of the commands fails:
@@ -82,7 +85,7 @@ $ orchy
 
 [Log] Orchy server is running on http://localhost:8181
 
-[Log] [HTTP/GET] /run?definition=main
+[Log] [HTTP/GET] /run?definition=main&secret=secret-token
 
 [Log] Running definition "main"
 
@@ -103,7 +106,7 @@ $ orchy
 
 [Log] Orchy server is running on http://localhost:8181
 
-[Log] [HTTP/GET] /run?definition=main
+[Log] [HTTP/GET] /run?definition=main&secret=secret-token
 
 [Log] Running definition "main"
 
