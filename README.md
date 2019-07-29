@@ -5,8 +5,8 @@
 ## Running the server
 
 ```shell
-$ npm install -g spago purescript@0.13.2
-$ spago run
+$ npm install -g orchy
+$ orchy
 ```
 
 The web hooks server will run under [http://localhost:8181](http://localhost:8181)
