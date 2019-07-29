@@ -12,7 +12,7 @@ import Logger as Logger
 import Node.Process (lookupEnv)
 import Orchestrator.FS (readFile)
 import Orchestrator.JSON (fromJSON)
-import Orchestrator.Main (makeId, runDefinitionWithId)
+import Orchestrator.Main (makeId, makeSecret, runDefinitionWithId, runDefinitionWithIdAndSecret)
 import Simple.JSON (readJSON)
 
 getPort :: Effect Int
@@ -38,9 +38,8 @@ main = do
         (Right definitions) -> do
           HTTPServer.startSync port $ \route -> do
             Logger.line
-            Logger.line
             Logger.log $ "[HTTP/GET] " <> route
             when (HTTPUtils.pathname route == "/run") do
               Logger.line
-              runDefinitionWithId (makeId (HTTPUtils.param "definition" route)) definitions
+              runDefinitionWithIdAndSecret (makeId (HTTPUtils.param "definition" route)) (makeSecret (HTTPUtils.param "secret" route)) definitions
           Logger.log $ "Orchy server is running on http://localhost:" <> (show port)
