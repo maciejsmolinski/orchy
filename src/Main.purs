@@ -3,16 +3,31 @@ module Main where
 import Prelude
 
 import Data.Either (Either(..))
+import Data.Maybe (Maybe(..))
 import Effect (Effect)
+import Foreign (MultipleErrors)
 import HTTP.Server as HTTPServer
 import HTTP.Utils as HTTPUtils
 import Logger as Logger
+import Node.Process (lookupEnv)
 import Orchestrator.FS (readFile)
 import Orchestrator.JSON (fromJSON)
 import Orchestrator.Main (makeId, runDefinitionWithId)
+import Simple.JSON (readJSON)
+
+getPort :: Effect Int
+getPort = do
+  maybePort <- lookupEnv "PORT"
+  case maybePort of
+    Nothing -> pure 8181
+    (Just portString) -> do
+      case (readJSON portString :: Either MultipleErrors Int) of
+        (Left _) -> pure 8181
+        (Right port) -> pure port
 
 main :: Effect Unit
 main = do
+  port <- getPort
   configuration <- readFile "configuration.json"
   case configuration of
     (Left _) -> Logger.error "Failure reading configuration.json"
@@ -21,11 +36,11 @@ main = do
       case parsed of
         (Left error) -> Logger.error $ "Configuration file is not structured properly" <> "\n" <> error
         (Right definitions) -> do
-          HTTPServer.startSync 8181 $ \route -> do
+          HTTPServer.startSync port $ \route -> do
             Logger.line
             Logger.line
             Logger.log $ "[HTTP/GET] " <> route
             when (HTTPUtils.pathname route == "/run") do
               Logger.line
               runDefinitionWithId (makeId (HTTPUtils.param "definition" route)) definitions
-          Logger.log $ "Orchy server is running on http://localhost:8181"
+          Logger.log $ "Orchy server is running on http://localhost:" <> (show port)
