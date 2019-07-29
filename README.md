@@ -43,7 +43,7 @@ while the browser will show only the `success` message, the server will give you
 When `configuration.json` file is missing:
 
 ```shell
-$ spago run
+$ orchy
 
 [Err] Failure reading configuration.json
 ```
@@ -51,7 +51,7 @@ $ spago run
 When `configuration.json` has a wrong format:
 
 ```shell
-$ spago run
+$ orchy
 
 [Err] Configuration file is not structured properly
 Error at array index 0: Error at property "commands": Type mismatch: expected array, found Undefined
@@ -60,7 +60,7 @@ Error at array index 0: Error at property "commands": Type mismatch: expected ar
 When selected definition is not present in the configuration:
 
 ```shell
-$ spago run
+$ orchy
 
 [Log] Orchy server is running on http://localhost:8181
 
@@ -72,7 +72,7 @@ $ spago run
 When definition exists but one of the commands fails:
 
 ```shell
-$ spago run
+$ orchy
 
 [Log] Orchy server is running on http://localhost:8181
 
@@ -93,7 +93,7 @@ Process exited with status code 128
 Finally, when everything succeeds:
 
 ```shell
-$ spago run
+$ orchy
 
 [Log] Orchy server is running on http://localhost:8181
 
