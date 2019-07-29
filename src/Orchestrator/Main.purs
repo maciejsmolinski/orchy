@@ -1,4 +1,4 @@
-module Orchestrator.Main (makeId, makeSecret, makeDir, makeCommand, makeDefinition, makeDefinitions, runDefinition, runDefinitionWithId, Definitions, Definition, Command, Id, Secret, Dir) where
+module Orchestrator.Main (makeId, makeSecret, makeDir, makeCommand, makeDefinition, makeDefinitions, runDefinition, runDefinitionWithId, runDefinitionWithIdAndSecret, Definitions, Definition, Command, Id, Secret, Dir) where
 
 import Control.Applicative (pure)
 import Control.Bind (bind, discard, (>>=))
@@ -20,6 +20,7 @@ import Effect (Effect)
 import Effect.Aff (Aff, launchAff_, message)
 import Effect.Class (liftEffect)
 import Logger as Logger
+import Prelude ((&&))
 import System.Commands (asyncExec)
 
 type Program = String
@@ -116,6 +117,19 @@ runDefinitionWithId selectedId@(Id id) (Definitions { definitions }) = do
   where
     maybeDefinition :: Maybe Definition
     maybeDefinition = find (\(Definition { id: definitionId }) -> definitionId == selectedId) definitions
+
+runDefinitionWithIdAndSecret :: Id -> Secret -> Definitions -> Effect Unit
+runDefinitionWithIdAndSecret selectedId@(Id id) selectedSecret (Definitions { definitions }) = do
+  case maybeDefinition of
+    Nothing -> do
+      Logger.error $ "Definition with provided id and secret not found"
+    (Just definition) -> do
+      Logger.log $ "Running definition \"" <> id <> "\""
+      Logger.line
+      runDefinition definition
+  where
+    maybeDefinition :: Maybe Definition
+    maybeDefinition = find (\(Definition { id: definitionId, secret: definitionSecret }) -> definitionId == selectedId && definitionSecret == selectedSecret) definitions
 
 runDefinition :: Definition -> Effect Unit
 runDefinition (Definition { dir, commands }) = execCommands dir commands
