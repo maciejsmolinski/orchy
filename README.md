@@ -2,16 +2,13 @@
 
 🤹‍♂️A simple, opinionated web hooks manager. Built with PureScript.
 
-## Running the server
+## Installation
 
-```shell
+```
 $ npm install -g orchy
-$ orchy
 ```
 
-The web hooks server will run under [http://localhost:8181](http://localhost:8181)
-
-## Configuring hooks
+## Configure web hooks and start the server
 
 Create a `configuration.json` file with the following contents:
 
@@ -30,15 +27,21 @@ Create a `configuration.json` file with the following contents:
 ]
 ```
 
+Now, run the orchy server under [http://localhost:8181](http://localhost:8181)
+
+```shell
+$ orchy
+```
+
 To execute the `main` configuration, open [http://localhost:8181/run?definition=main](http://localhost:8181/run?definition=main) in your browser or run the following in terminal
 
 ```
 $ curl http://localhost:8181/run?definition=main
 ```
 
-while the browser will show only the `success` message, the server will give you more feedback
+while the browser will show only a `success` message, the server will give you more feedback
 
-## Feedback
+## Feedback from the server
 
 When `configuration.json` file is missing:
 
