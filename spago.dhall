@@ -15,6 +15,7 @@ You can edit this file as you like.
     , "simple-json"
     , "strings"
     , "spec"
+    , "node-process"
     ]
 , packages =
     ./packages.dhall
