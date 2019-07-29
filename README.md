@@ -62,6 +62,8 @@ When selected definition is not present in the configuration:
 ```shell
 $ spago run
 
+[Log] Orchy server is running on http://localhost:8181
+
 [Log] [HTTP/GET] /run?definition=unknown
 
 [Err] Definition with id "unknown" not found
@@ -71,6 +73,8 @@ When definition exists but one of the commands fails:
 
 ```shell
 $ spago run
+
+[Log] Orchy server is running on http://localhost:8181
 
 [Log] [HTTP/GET] /run?definition=main
 
@@ -90,6 +94,8 @@ Finally, when everything succeeds:
 
 ```shell
 $ spago run
+
+[Log] Orchy server is running on http://localhost:8181
 
 [Log] [HTTP/GET] /run?definition=main
 
@@ -111,6 +117,7 @@ nothing to commit, working tree clean
 ## Local development
 
 ```shell
+$ npm install -g spago@0.8.5 purescript@0.13.2
 $ spago bundle-app -w
 $ npx nodemon index.js
 ```

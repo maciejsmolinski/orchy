@@ -23,7 +23,9 @@ main = do
         (Right definitions) -> do
           HTTPServer.startSync 8181 $ \route -> do
             Logger.line
+            Logger.line
             Logger.log $ "[HTTP/GET] " <> route
             when (HTTPUtils.pathname route == "/run") do
               Logger.line
               runDefinitionWithId (makeId (HTTPUtils.param "definition" route)) definitions
+          Logger.log $ "Orchy server is running on http://localhost:8181"
