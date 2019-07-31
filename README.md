@@ -2,6 +2,8 @@
 
 🤹‍♂️A simple, opinionated web hooks manager. Built with PureScript.
 
+<img src="/assets/success.gif" width="490" height="325"/>
+
 ## Installation
 
 ```
