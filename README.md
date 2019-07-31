@@ -2,7 +2,7 @@
 
 🤹‍♂️A simple, opinionated web hooks manager. Built with PureScript.
 
-<img src="/assets/success.gif" width="490" height="325"/>
+<img src="https://raw.githubusercontent.com/maciejsmolinski/orchy/master/assets/success.gif" width="490" height="325"/>
 
 ## Installation
 

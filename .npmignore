@@ -6,3 +6,4 @@ configuration.json.example
 packages.dhall
 spago.dhall
 test
+assets
