@@ -71,7 +71,7 @@ When selected definition is not present in the configuration:
 ```shell
 $ orchy
 
-[Log] Orchy server is running on http://localhost:8181
+[Log] Orchy server is running at http://localhost:8181
 [Log] Incoming request /run?definition=unknown&secret=unknown
 [Err] Definition with provided id and secret not found
 ```
@@ -81,7 +81,7 @@ When definition exists but one of the commands fails:
 ```shell
 $ orchy
 
-[Log] Orchy server is running on http://localhost:8181
+[Log] Orchy server is running at http://localhost:8181
 [Log] Incoming request /run?definition=main&secret=secret-token
 [Log] Running definition "main"
 [Log] Executing pwd
@@ -98,7 +98,7 @@ Finally, when everything succeeds:
 ```shell
 $ orchy
 
-[Log] Orchy server is running on http://localhost:8181
+[Log] Orchy server is running at http://localhost:8181
 [Log] Incoming request /run?definition=main&secret=secret-token
 [Log] Running definition "main"
 [Log] Executing pwd
