@@ -72,9 +72,7 @@ When selected definition is not present in the configuration:
 $ orchy
 
 [Log] Orchy server is running on http://localhost:8181
-
-[Log] [HTTP/GET] /run?definition=unknown&secret=unknown
-
+[Log] Incoming request /run?definition=unknown&secret=unknown
 [Err] Definition with provided id and secret not found
 ```
 
@@ -84,14 +82,10 @@ When definition exists but one of the commands fails:
 $ orchy
 
 [Log] Orchy server is running on http://localhost:8181
-
-[Log] [HTTP/GET] /run?definition=main&secret=secret-token
-
+[Log] Incoming request /run?definition=main&secret=secret-token
 [Log] Running definition "main"
-
 [Log] Executing pwd
 /Users/maciejsmolinski/git/orchy
-
 [Log] Executing git branch
 fatal: not a git repository (or any of the parent directories): .git
 Process exited with status code 128
@@ -105,17 +99,12 @@ Finally, when everything succeeds:
 $ orchy
 
 [Log] Orchy server is running on http://localhost:8181
-
-[Log] [HTTP/GET] /run?definition=main&secret=secret-token
-
+[Log] Incoming request /run?definition=main&secret=secret-token
 [Log] Running definition "main"
-
 [Log] Executing pwd
 /Users/maciejsmolinski/git/orchy
-
 [Log] Executing git branch
 * master
-
 [Log] Executing git status
 On branch server
 nothing to commit, working tree clean

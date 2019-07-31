@@ -112,7 +112,6 @@ runDefinitionWithId selectedId@(Id id) (Definitions { definitions }) = do
       Logger.error $ "Definition with id \"" <> id <> "\" not found"
     (Just definition) -> do
       Logger.log $ "Running definition \"" <> id <> "\""
-      Logger.line
       runDefinition definition
   where
     maybeDefinition :: Maybe Definition
@@ -125,7 +124,6 @@ runDefinitionWithIdAndSecret selectedId@(Id id) selectedSecret (Definitions { de
       Logger.error $ "Definition with provided id and secret not found"
     (Just definition) -> do
       Logger.log $ "Running definition \"" <> id <> "\""
-      Logger.line
       runDefinition definition
   where
     maybeDefinition :: Maybe Definition
@@ -148,7 +146,6 @@ runDefinition (Definition { dir, commands }) = execCommands dir commands
     logOutput :: String -> Aff Unit
     logOutput value = do
       liftEffect $ Logger.dump value
-      liftEffect $ Logger.line
 
     execCommands :: Dir -> Array Command -> Effect Unit
     execCommands cwd items =
@@ -160,5 +157,6 @@ runDefinition (Definition { dir, commands }) = execCommands dir commands
             liftEffect $ Logger.line
             liftEffect $ Logger.error "Execution FAILED"
           (Right _) -> do
+            liftEffect $ Logger.line
             liftEffect $ Logger.log "Execution SUCCEEDED"
         pure unit

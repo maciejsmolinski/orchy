@@ -37,9 +37,7 @@ main = do
         (Left error) -> Logger.error $ "Configuration file is not structured properly" <> "\n" <> error
         (Right definitions) -> do
           HTTPServer.startSync port $ \route -> do
-            Logger.line
-            Logger.log $ "[HTTP/GET] " <> route
+            Logger.log $ "Incoming request " <> route
             when (HTTPUtils.pathname route == "/run") do
-              Logger.line
               runDefinitionWithIdAndSecret (makeId (HTTPUtils.param "definition" route)) (makeSecret (HTTPUtils.param "secret" route)) definitions
           Logger.log $ "Orchy server is running on http://localhost:" <> (show port)
