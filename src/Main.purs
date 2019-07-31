@@ -12,7 +12,7 @@ import Logger as Logger
 import Node.Process (lookupEnv)
 import Orchestrator.FS (readFile)
 import Orchestrator.JSON (fromJSON)
-import Orchestrator.Main (makeId, makeSecret, runDefinitionWithId, runDefinitionWithIdAndSecret)
+import Orchestrator.Main (makeId, makeSecret, runDefinitionWithIdAndSecret)
 import Simple.JSON (readJSON)
 
 getPort :: Effect Int
