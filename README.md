@@ -21,7 +21,6 @@ Create a `configuration.json` file with the following contents:
         "dir": ".",
         "secret": "secret-token",
         "commands": [
-            "pwd",
             "git branch",
             "git status"
         ]
@@ -33,12 +32,16 @@ Now, run the orchy server under [http://localhost:8181](http://localhost:8181)
 
 ```shell
 $ orchy
+
+Orchy server is running at http://localhost:8181
 ```
 
 To run it on a different port:
 
 ```
 $ PORT=8282 orchy
+
+Orchy server is running at http://localhost:8282
 ```
 
 To execute the `main` configuration, open [http://localhost:8181/run?definition=main&secret=secret-token](http://localhost:8181/run?definition=main&secret=secret-token) in your browser or run the following in terminal
@@ -56,7 +59,7 @@ When `configuration.json` file is missing:
 ```shell
 $ orchy
 
-[Err] Failure reading configuration.json
+2019/08/05 23:55:40 err Failure reading configuration.json
 ```
 
 When `configuration.json` has a wrong format:
@@ -64,18 +67,18 @@ When `configuration.json` has a wrong format:
 ```shell
 $ orchy
 
-[Err] Configuration file is not structured properly
-Error at array index 0: Error at property "commands": Type mismatch: expected array, found Undefined
+2019/08/05 23:56:40 err Configuration file is not structured properly
+2019/08/05 23:56:40     Error at array index 0: Error at property "id": Type mismatch: expected String, found Undefined
 ```
 
 When selected definition is not present in the configuration:
 
 ```shell
 $ orchy
+Orchy server is running at http://localhost:8181
 
-[Log] Orchy server is running at http://localhost:8181
-[Log] Incoming request /run?definition=unknown&secret=unknown
-[Err] Definition with provided id and secret not found
+2019/08/06 23:57:52 log Incoming request /run?definition=unknown&secret=unknown-token
+2019/08/06 23:57:52 err Definition with provided id and secret not found
 ```
 
 When definition exists but one of the commands fails:
@@ -83,16 +86,14 @@ When definition exists but one of the commands fails:
 ```shell
 $ orchy
 
-[Log] Orchy server is running at http://localhost:8181
-[Log] Incoming request /run?definition=main&secret=secret-token
-[Log] Running definition "main"
-[Log] Executing pwd
-/Users/maciejsmolinski/git/orchy
-[Log] Executing git branch
-fatal: not a git repository (or any of the parent directories): .git
-Process exited with status code 128
+Orchy server is running at http://localhost:8181
 
-[Err] Execution FAILED
+2019/08/06 00:02:20 log Incoming request /run?definition=main&secret=secret-token
+2019/08/06 00:02:20 log Running definition "main"
+2019/08/06 00:02:20 log Executing git branch
+2019/08/06 00:02:20     fatal: not a git repository (or any of the parent directories): .git
+2019/08/06 00:02:20     Process exited with status code 128
+2019/08/06 00:02:20 err Execution FAILED
 ```
 
 Finally, when everything succeeds:
@@ -100,18 +101,16 @@ Finally, when everything succeeds:
 ```shell
 $ orchy
 
-[Log] Orchy server is running at http://localhost:8181
-[Log] Incoming request /run?definition=main&secret=secret-token
-[Log] Running definition "main"
-[Log] Executing pwd
-/Users/maciejsmolinski/git/orchy
-[Log] Executing git branch
-* master
-[Log] Executing git status
-On branch server
-nothing to commit, working tree clean
+Orchy server is running at http://localhost:8181
 
-[Log] Execution SUCCEEDED
+2019/08/06 00:03:30 log Incoming request /run?definition=main&secret=secret-token
+2019/08/06 00:03:30 log Running definition "main"
+2019/08/06 00:03:30 log Executing git branch
+2019/08/06 00:03:30     * master
+2019/08/06 00:03:30 log Executing git status
+2019/08/06 00:03:30     On branch master
+2019/08/06 00:03:30     nothing to commit, working tree clean
+2019/08/06 00:03:30 log Execution SUCCEEDED
 ```
 
 ## Local development

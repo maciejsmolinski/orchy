@@ -4,7 +4,6 @@
         "dir": ".",
         "secret": "secret-token",
         "commands": [
-            "pwd",
             "git branch",
             "git status"
         ]
