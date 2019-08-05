@@ -1,7 +1,10 @@
-module Logger (log, error, dump, line) where
+module Logger (log, error, quote, dump, line) where
 
 import Prelude
 
+import Data.String (Pattern(..), split)
+import Data.Traversable (traverse_)
+import Date (hhmmss, yyyymmdd)
 import Effect (Effect)
 import Effect.Console as Console
 
@@ -14,19 +17,29 @@ line :: Effect Unit
 line = Console.log ""
 
 log :: String -> Effect Unit
-log = Console.log <<< format Log
+log = (withTimestamp >=> Console.log) <<< format Log
 
 error :: String -> Effect Unit
-error = Console.log <<< format Error
+error = (withTimestamp >=> Console.log) <<< format Error
 
 dump :: String -> Effect Unit
 dump = Console.log <<< format Dump
+
+quote :: String -> Effect Unit
+quote message =
+  traverse_ (\x -> (withTimestamp >=> dump) $ "    " <> x) (split (Pattern "\n") message)
+
+withTimestamp :: String -> Effect String
+withTimestamp message = do
+  date <- yyyymmdd
+  hour <- hhmmss
+  pure $ date <> " " <> hour <> " " <> message
 
 format :: Format -> String -> String
 format Log message
   = code "1"
     <> code "37"
-    <> "[Log] "
+    <> "log "
     <> code "0"
     <> code "90"
     <> message
@@ -34,7 +47,7 @@ format Log message
 format Error message
   = code "1"
     <> code "31"
-    <> "[Err] "
+    <> "err "
     <> code "0"
     <> code "90"
     <> message
