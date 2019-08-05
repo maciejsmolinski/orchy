@@ -34,7 +34,9 @@ main = do
     (Right contents) -> do
       parsed <- pure $ fromJSON contents
       case parsed of
-        (Left error) -> Logger.error $ "Configuration file is not structured properly" <> "\n" <> error
+        (Left error) -> do
+          Logger.error "Configuration file is not structured properly"
+          Logger.quote error
         (Right definitions) -> do
           HTTPServer.startSync port $ \route -> do
             Logger.log $ "Incoming request " <> route
