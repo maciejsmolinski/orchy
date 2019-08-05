@@ -41,3 +41,4 @@ main = do
             when (HTTPUtils.pathname route == "/run") do
               runDefinitionWithIdAndSecret (makeId (HTTPUtils.param "definition" route)) (makeSecret (HTTPUtils.param "secret" route)) definitions
           Logger.dump $ "Orchy server is running at http://localhost:" <> (show port)
+          Logger.line
