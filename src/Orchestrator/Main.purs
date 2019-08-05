@@ -7,13 +7,14 @@ import Data.Array (find, (:))
 import Data.Either (Either(..))
 import Data.Eq (class Eq, (==))
 import Data.Foldable (foldl)
-import Data.Function (($))
+import Data.Function (($), (<<<))
 import Data.Generic.Rep (class Generic)
 import Data.Generic.Rep.Eq (genericEq)
 import Data.Generic.Rep.Show (genericShow)
 import Data.Maybe (Maybe(..))
 import Data.Semigroup ((<>))
 import Data.Show (class Show)
+import Data.String (Pattern(..), split)
 import Data.Traversable (traverse_)
 import Data.Unit (Unit, unit)
 import Effect (Effect)
@@ -143,20 +144,14 @@ runDefinition (Definition { dir, commands }) = execCommands dir commands
     run :: Dir -> Command -> Aff String
     run (Dir cwd) (Command program args) = asyncExec program args { cwd }
 
-    logOutput :: String -> Aff Unit
-    logOutput value = do
-      liftEffect $ Logger.dump value
-
     execCommands :: Dir -> Array Command -> Effect Unit
     execCommands cwd items =
       launchAff_ do
-        result <- try $ traverse_ (\command -> (annotate command) >>= run cwd >>= logOutput) items
+        result <- try $ traverse_ (\command -> (annotate command) >>= run cwd >>= (liftEffect <<< Logger.quote)) items
         case result of
           (Left a) -> do
-            liftEffect $ Logger.dump $ message a
-            liftEffect $ Logger.line
+            liftEffect $ Logger.quote $ message a
             liftEffect $ Logger.error "Execution FAILED"
           (Right _) -> do
-            liftEffect $ Logger.line
             liftEffect $ Logger.log "Execution SUCCEEDED"
         pure unit
