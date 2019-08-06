@@ -2,7 +2,7 @@
 
 🤹‍♂️A simple, opinionated web hooks manager. Built with PureScript.
 
-<img src="https://raw.githubusercontent.com/maciejsmolinski/orchy/master/assets/success.gif" width="490" height="325"/>
+<img src="https://raw.githubusercontent.com/maciejsmolinski/orchy/master/assets/success.gif" width="650" height="333"/>
 
 ## Installation
 
@@ -57,16 +57,12 @@ while the browser will show only a `success` message, the server will give you m
 When `configuration.json` file is missing:
 
 ```shell
-$ orchy
-
 2019/08/05 23:55:40 err Failure reading configuration.json
 ```
 
 When `configuration.json` has a wrong format:
 
 ```shell
-$ orchy
-
 2019/08/05 23:56:40 err Configuration file is not structured properly
 2019/08/05 23:56:40     Error at array index 0: Error at property "id": Type mismatch: expected String, found Undefined
 ```
@@ -74,9 +70,6 @@ $ orchy
 When selected definition is not present in the configuration:
 
 ```shell
-$ orchy
-Orchy server is running at http://localhost:8181
-
 2019/08/06 23:57:52 log Incoming request /run?definition=unknown&secret=unknown-token
 2019/08/06 23:57:52 err Definition with provided id and secret not found
 ```
@@ -84,10 +77,6 @@ Orchy server is running at http://localhost:8181
 When definition exists but one of the commands fails:
 
 ```shell
-$ orchy
-
-Orchy server is running at http://localhost:8181
-
 2019/08/06 00:02:20 log Incoming request /run?definition=main&secret=secret-token
 2019/08/06 00:02:20 log Running definition "main"
 2019/08/06 00:02:20 log Executing git branch
@@ -99,10 +88,6 @@ Orchy server is running at http://localhost:8181
 Finally, when everything succeeds:
 
 ```shell
-$ orchy
-
-Orchy server is running at http://localhost:8181
-
 2019/08/06 00:03:30 log Incoming request /run?definition=main&secret=secret-token
 2019/08/06 00:03:30 log Running definition "main"
 2019/08/06 00:03:30 log Executing git branch
