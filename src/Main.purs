@@ -39,8 +39,8 @@ main = do
           Logger.quote error
         (Right definitions) -> do
           HTTPServer.startSync port $ \route -> do
-            Logger.log $ "Incoming request " <> route
+            Logger.info $ "Incoming request " <> route
             when (HTTPUtils.pathname route == "/run") do
               runDefinitionWithIdAndSecret (makeId (HTTPUtils.param "definition" route)) (makeSecret (HTTPUtils.param "secret" route)) definitions
-          Logger.dump $ "Orchy server is running at http://localhost:" <> (show port)
+          Logger.log $ "Orchy server is running at http://localhost:" <> (show port)
           Logger.line

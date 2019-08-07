@@ -1,4 +1,4 @@
-module Logger (log, error, quote, dump, line) where
+module Logger (info, error, quote, log, line) where
 
 import Prelude
 
@@ -9,9 +9,9 @@ import Effect (Effect)
 import Effect.Console as Console
 
 data Format
-  = Log
+  = Info
   | Error
-  | Dump
+  | Log
   | Empty
 
 logWithTimestamp :: String -> Effect Unit
@@ -29,11 +29,11 @@ lines = split (Pattern "\n")
 line :: Effect Unit
 line = Console.log ""
 
-dump :: String -> Effect Unit
-dump = Console.log <<< format Dump
-
 log :: String -> Effect Unit
-log = (traverse_ (logWithTimestamp <<< format Log)) <<< lines
+log = Console.log <<< format Log
+
+info :: String -> Effect Unit
+info = (traverse_ (logWithTimestamp <<< format Info)) <<< lines
 
 error :: String -> Effect Unit
 error = (traverse_ (logWithTimestamp <<< format Error)) <<< lines
@@ -42,10 +42,10 @@ quote :: String -> Effect Unit
 quote = (traverse_ (logWithTimestamp <<< format Empty)) <<< lines
 
 format :: Format -> String -> String
-format Log message = bold <> blue <> "log " <> clear <> message <> clear
-format Error message = bold <> red <> "err " <> clear <> message <> clear
-format Dump message = darkgray <> message <> clear
-format Empty message = "    " <> darkgray <> message <> clear
+format Info message = bold <> blue <> "info " <> clear <> message <> clear
+format Error message = bold <> red <> "err  " <> clear <> message <> clear
+format Log message = darkgray <> message <> clear
+format Empty message = "     " <> darkgray <> message <> clear
 
 code :: String -> String
 code a = "\x1b[" <> a <> "m"

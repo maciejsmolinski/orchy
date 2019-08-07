@@ -111,7 +111,7 @@ runDefinitionWithId selectedId@(Id id) (Definitions { definitions }) = do
     Nothing -> do
       Logger.error $ "Definition with id \"" <> id <> "\" not found"
     (Just definition) -> do
-      Logger.log $ "Running definition \"" <> id <> "\""
+      Logger.info $ "Running definition \"" <> id <> "\""
       runDefinition definition
   where
     maybeDefinition :: Maybe Definition
@@ -123,7 +123,7 @@ runDefinitionWithIdAndSecret selectedId@(Id id) selectedSecret (Definitions { de
     Nothing -> do
       Logger.error $ "Definition with provided id and secret not found"
     (Just definition) -> do
-      Logger.log $ "Running definition \"" <> id <> "\""
+      Logger.info $ "Running definition \"" <> id <> "\""
       runDefinition definition
   where
     maybeDefinition :: Maybe Definition
@@ -137,7 +137,7 @@ runDefinition (Definition { dir, commands }) = execCommands dir commands
 
     annotate :: Command -> Aff Command
     annotate command@(Command program args) = do
-      liftEffect $ Logger.log $ "Executing" <> (showPretty (program : args))
+      liftEffect $ Logger.info $ "Executing" <> (showPretty (program : args))
       pure command
 
     run :: Dir -> Command -> Aff String
@@ -152,5 +152,5 @@ runDefinition (Definition { dir, commands }) = execCommands dir commands
             liftEffect $ Logger.quote $ message a
             liftEffect $ Logger.error "Execution FAILED"
           (Right _) -> do
-            liftEffect $ Logger.log "Execution SUCCEEDED"
+            liftEffect $ Logger.info "Execution SUCCEEDED"
         pure unit
