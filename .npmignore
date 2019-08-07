@@ -7,3 +7,4 @@ packages.dhall
 spago.dhall
 test
 assets
+.psci_modules
