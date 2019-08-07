@@ -1,4 +1,4 @@
-module Orchestrator.Main (makeId, makeSecret, makeDir, makeCommand, makeDefinition, makeDefinitions, runDefinition, runDefinitionWithId, runDefinitionWithIdAndSecret, Definitions, Definition, Command, Id, Secret, Dir) where
+module Orchestrator.Main (makeId, makeSecret, makeDir, makeCommand, makeDefinition, makeDefinitions, runDefinition, runDefinitionWithIdAndSecret, Definitions, Definition, Command, Id, Secret, Dir) where
 
 import Control.Applicative (pure)
 import Control.Bind (bind, discard, (>>=))
@@ -14,13 +14,14 @@ import Data.Generic.Rep.Show (genericShow)
 import Data.Maybe (Maybe(..))
 import Data.Semigroup ((<>))
 import Data.Show (class Show)
+import Data.String (joinWith)
 import Data.Traversable (traverse_)
 import Data.Unit (Unit, unit)
 import Effect (Effect)
-import Effect.Aff (Aff, launchAff_, message)
+import Effect.Aff (Aff, Error, launchAff_, message)
 import Effect.Class (liftEffect)
 import Logger as Logger
-import Prelude ((&&))
+import Prelude ((&&), (*>))
 import System.Commands (asyncExec)
 
 type Program = String
@@ -105,18 +106,6 @@ makeDefinition id secret dir commands = Definition { id, secret, dir, commands }
 makeDefinitions :: Array Definition -> Definitions
 makeDefinitions definitions = Definitions { definitions }
 
-runDefinitionWithId :: Id -> Definitions -> Effect Unit
-runDefinitionWithId selectedId@(Id id) (Definitions { definitions }) = do
-  case maybeDefinition of
-    Nothing -> do
-      Logger.error $ "Definition with id \"" <> id <> "\" not found"
-    (Just definition) -> do
-      Logger.info $ "Running definition \"" <> id <> "\""
-      runDefinition definition
-  where
-    maybeDefinition :: Maybe Definition
-    maybeDefinition = find (\(Definition { id: definitionId }) -> definitionId == selectedId) definitions
-
 runDefinitionWithIdAndSecret :: Id -> Secret -> Definitions -> Effect Unit
 runDefinitionWithIdAndSecret selectedId@(Id id) selectedSecret (Definitions { definitions }) = do
   case maybeDefinition of
@@ -130,27 +119,23 @@ runDefinitionWithIdAndSecret selectedId@(Id id) selectedSecret (Definitions { de
     maybeDefinition = find (\(Definition { id: definitionId, secret: definitionSecret }) -> definitionId == selectedId && definitionSecret == selectedSecret) definitions
 
 runDefinition :: Definition -> Effect Unit
-runDefinition (Definition { dir, commands }) = execCommands dir commands
+runDefinition (Definition { dir, commands }) = launchAff_ do
+  result <- try $ traverse_ (executeCommand dir) commands
+  case result of
+    (Left output) -> logOutput output *> logFailure
+    (Right _) -> logSuccess
   where
-    showPretty :: Array String -> String
-    showPretty args = foldl (\a b -> a <> " " <> b) "" args
+    logFailure :: Aff Unit
+    logFailure = liftEffect $ Logger.error "Execution FAILED"
 
-    annotate :: Command -> Aff Command
-    annotate command@(Command program args) = do
-      liftEffect $ Logger.info $ "Executing" <> (showPretty (program : args))
-      pure command
+    logSuccess :: Aff Unit
+    logSuccess = liftEffect $ Logger.info "Execution SUCCEEDED"
 
-    run :: Dir -> Command -> Aff String
-    run (Dir cwd) (Command program args) = asyncExec program args { cwd }
+    logOutput :: Error -> Aff Unit
+    logOutput = liftEffect <<< Logger.quote <<< message
 
-    execCommands :: Dir -> Array Command -> Effect Unit
-    execCommands cwd items =
-      launchAff_ do
-        result <- try $ traverse_ (\command -> (annotate command) >>= run cwd >>= (liftEffect <<< Logger.quote)) items
-        case result of
-          (Left a) -> do
-            liftEffect $ Logger.quote $ message a
-            liftEffect $ Logger.error "Execution FAILED"
-          (Right _) -> do
-            liftEffect $ Logger.info "Execution SUCCEEDED"
-        pure unit
+    executeCommand :: Dir -> Command -> Aff Unit
+    executeCommand (Dir cwd) (Command program args) = do
+      liftEffect $ Logger.info $ "Executing " <> (joinWith " " (program : args))
+      output <- asyncExec program args { cwd }
+      liftEffect $ Logger.quote output
