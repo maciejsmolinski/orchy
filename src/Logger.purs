@@ -12,50 +12,58 @@ data Format
   = Log
   | Error
   | Dump
+  | Empty
 
-line :: Effect Unit
-line = Console.log ""
-
-log :: String -> Effect Unit
-log = (withTimestamp >=> Console.log) <<< format Log
-
-error :: String -> Effect Unit
-error = (withTimestamp >=> Console.log) <<< format Error
-
-dump :: String -> Effect Unit
-dump = Console.log <<< format Dump
-
-quote :: String -> Effect Unit
-quote message =
-  traverse_ (\x -> (withTimestamp >=> dump) $ "    " <> x) (split (Pattern "\n") message)
+logWithTimestamp :: String -> Effect Unit
+logWithTimestamp = withTimestamp >=> Console.log
 
 withTimestamp :: String -> Effect String
 withTimestamp message = do
   date <- yyyymmdd
   hour <- hhmmss
-  pure $ date <> " " <> hour <> " " <> message
+  pure $ darkgray <> date <> " " <> hour <> clear <> " " <> message
+
+lines :: String -> Array String
+lines = split (Pattern "\n")
+
+line :: Effect Unit
+line = Console.log ""
+
+dump :: String -> Effect Unit
+dump = Console.log <<< format Dump
+
+log :: String -> Effect Unit
+log = (traverse_ (logWithTimestamp <<< format Log)) <<< lines
+
+error :: String -> Effect Unit
+error = (traverse_ (logWithTimestamp <<< format Error)) <<< lines
+
+quote :: String -> Effect Unit
+quote = (traverse_ (logWithTimestamp <<< format Empty)) <<< lines
 
 format :: Format -> String -> String
-format Log message
-  = code "1"
-    <> code "37"
-    <> "log "
-    <> code "0"
-    <> code "90"
-    <> message
-    <> code "0"
-format Error message
-  = code "1"
-    <> code "31"
-    <> "err "
-    <> code "0"
-    <> code "90"
-    <> message
-    <> code "0"
-format Dump message
-  = code "38;5;241"
-    <> message
-    <> code "0"
+format Log message = bold <> blue <> "log " <> clear <> message <> clear
+format Error message = bold <> red <> "err " <> clear <> message <> clear
+format Dump message = darkgray <> message <> clear
+format Empty message = "    " <> darkgray <> message <> clear
 
 code :: String -> String
 code a = "\x1b[" <> a <> "m"
+
+red :: String
+red = code "31"
+
+yellow :: String
+yellow = code "33"
+
+blue :: String
+blue = code "34"
+
+bold :: String
+bold = code "1"
+
+darkgray :: String
+darkgray = code "90"
+
+clear :: String
+clear = code "0"
