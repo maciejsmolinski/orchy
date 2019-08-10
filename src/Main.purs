@@ -5,7 +5,6 @@ import Prelude
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
-import Foreign (MultipleErrors)
 import HTTP.Server as HTTPServer
 import HTTP.Utils as HTTPUtils
 import Logger as Logger
@@ -13,17 +12,14 @@ import Node.Process (lookupEnv)
 import Orchestrator.FS (readFile)
 import Orchestrator.JSON (fromJSON)
 import Orchestrator.Main (makeId, makeSecret, runDefinitionWithIdAndSecret)
-import Simple.JSON (readJSON)
+import Simple.JSON (readJSON_)
 
 getPort :: Effect Int
 getPort = do
   maybePort <- lookupEnv "PORT"
-  case maybePort of
+  case (maybePort >>= readJSON_) of
     Nothing -> pure 8181
-    (Just portString) -> do
-      case (readJSON portString :: Either MultipleErrors Int) of
-        (Left _) -> pure 8181
-        (Right port) -> pure port
+    (Just port) -> pure port
 
 main :: Effect Unit
 main = do
