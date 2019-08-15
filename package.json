@@ -13,7 +13,7 @@
     "license": "MIT",
     "devDependencies": {
         "purescript": "^0.13.2",
-        "spago": "^0.8.5"
+        "spago": "^0.9.0"
     },
     "scripts": {
         "prepublish": "spago bundle-app --main Main --to index.js && printf '%s\n%s' \"#!/usr/bin/env node\" \"$(cat index.js)\" > index.js"
