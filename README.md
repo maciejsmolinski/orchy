@@ -52,6 +52,20 @@ $ curl "http://localhost:8181/run?definition=main&secret=secret-token"
 
 while the browser will show only a `success` message, the server will give you more feedback
 
+## Slack integration
+
+To receive slack notifications, create a new [Incoming Webhook](https://slack.com/apps/A0F7XDUAZ-incoming-webhooks) in your Slack account. Then, run orchy with the following environment variables:
+
+* `SLACK_HOOK_URL` - webhook url, e.g. `https://hooks.slack.com/services/ABC/DEF/GHI`
+* `SLACK_CHANNEL` - channel to post notifications to, e.g. `deployment-logs`
+
+```shell
+$ SLACK_HOOK_URL=<url> SLACK_CHANNEL=<channel> orchy
+
+Orchy server is running at http://localhost:8181
+```
+
+
 ## Feedback from the server
 
 When `configuration.json` file is missing:

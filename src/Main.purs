@@ -1,29 +1,19 @@
 module Main where
 
-import Prelude
-
 import Data.Either (Either(..))
-import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import HTTP.Server as HTTPServer
 import HTTP.Utils as HTTPUtils
 import Logger as Logger
-import Node.Process (lookupEnv)
 import Orchestrator.FS (readFile)
 import Orchestrator.JSON (fromJSON)
 import Orchestrator.Main (makeId, makeSecret, runDefinitionWithIdAndSecret)
-import Simple.JSON (readJSON_)
-
-getPort :: Effect Int
-getPort = do
-  maybePort <- lookupEnv "PORT"
-  case (maybePort >>= readJSON_) of
-    Nothing -> pure 8181
-    (Just port) -> pure port
+import Prelude
+import System.Environment (readEnvInt)
 
 main :: Effect Unit
 main = do
-  port <- getPort
+  port <- readEnvInt "PORT" 8181
   configuration <- readFile "configuration.json"
   case configuration of
     (Left _) -> Logger.error "Failure reading configuration.json"

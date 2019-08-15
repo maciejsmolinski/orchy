@@ -19,6 +19,7 @@ import Effect (Effect)
 import Effect.Aff (Aff, Error, launchAff_, message)
 import Effect.Class (liftEffect)
 import Logger as Logger
+import Notifications.Slack as Slack
 import Prelude ((&&), (*>))
 import System.Commands (asyncExec)
 
@@ -124,16 +125,24 @@ runDefinition (Definition { dir, commands }) = launchAff_ do
     (Right _) -> logSuccess
   where
     logFailure :: Aff Unit
-    logFailure = liftEffect $ Logger.error "Execution FAILED"
+    logFailure = do
+      liftEffect $ Logger.error "Execution FAILED"
+      Slack.notify "Execution FAILED"
 
     logSuccess :: Aff Unit
-    logSuccess = liftEffect $ Logger.info "Execution SUCCEEDED"
+    logSuccess = do
+      liftEffect $ Logger.info "Execution SUCCEEDED"
+      Slack.notify "Execution SUCCEEDED"
 
     logOutput :: Error -> Aff Unit
-    logOutput = liftEffect <<< Logger.quote <<< message
+    logOutput error = do
+      liftEffect <<< Logger.quote $ message error
+      Slack.notify $ message error
 
     executeCommand :: Dir -> Command -> Aff Unit
     executeCommand (Dir cwd) (Command program args) = do
       liftEffect $ Logger.info $ "Executing " <> (joinWith " " (program : args))
+      Slack.notify $ "Executing " <> (joinWith " " (program : args))
       output <- asyncExec program args { cwd }
       liftEffect $ Logger.quote output
+      Slack.notify output
