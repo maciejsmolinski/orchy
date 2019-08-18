@@ -1,7 +1,7 @@
 {
     "name": "orchy",
     "version": "0.6.0",
-    "description": "a simple, opinionated web hooks manager",
+    "description": "a simple web hooks manager with zero npm dependencies",
     "keywords": [
         "webhooks",
         "hooks",
