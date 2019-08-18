@@ -1,6 +1,6 @@
 # Orchy
 
-🤹‍♂️A simple, opinionated web hooks manager. Built with PureScript.
+🤹‍♂️A simple, opinionated web hooks manager with zero npm dependencies. Built with PureScript.
 
 <img src="https://raw.githubusercontent.com/maciejsmolinski/orchy/master/assets/success.gif" width="650" height="333"/>
 
