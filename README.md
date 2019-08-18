@@ -128,4 +128,4 @@ $ spago test --watch
 
 ## Similar projects
 
-* (`danistefanovic/hooka`)[https://github.com/danistefanovic/hooka] - a webhook server with zero coding
+* [`danistefanovic/hooka`](https://github.com/danistefanovic/hooka) - a webhook server with zero coding
