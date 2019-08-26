@@ -1,4 +1,4 @@
-module HTTP.Client where
+module HTTP.Client (post) where
 
 import Data.Function.Uncurried (Fn2, runFn2)
 import Data.Unit (Unit)
