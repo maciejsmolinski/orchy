@@ -1,24 +1,26 @@
 {
-    "name": "orchy",
-    "version": "0.6.0",
-    "description": "a simple web hooks manager with zero npm dependencies",
-    "keywords": [
-        "webhooks",
-        "hooks",
-        "server"
-    ],
-    "main": "index.js",
-    "repository": "git@github.com:maciejsmolinski/orchy.git",
-    "author": "Maciej Smolinski <contact@maciejsmolinski.com>",
-    "license": "MIT",
-    "devDependencies": {
-        "purescript": "^0.13.3",
-        "spago": "^0.20.7"
-    },
-    "scripts": {
-        "prepublish": "spago bundle-app --main Main --to index.js && printf '%s\n%s' \"#!/usr/bin/env node\" \"$(cat index.js)\" > index.js"
-    },
-    "bin": {
-        "orchy": "./index.js"
-    }
+  "name": "orchy",
+  "version": "0.6.0",
+  "description": "a simple web hooks manager with zero npm dependencies",
+  "keywords": [
+    "webhooks",
+    "hooks",
+    "server"
+  ],
+  "main": "index.js",
+  "type": "module",
+  "repository": "git@github.com:maciejsmolinski/orchy.git",
+  "author": "Maciej Smolinski <contact@maciejsmolinski.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "purescript": "^0.15.7",
+    "spago": "^0.20.9",
+    "esbuild": "^0.17.11"
+  },
+  "scripts": {
+    "prepublish": "spago bundle-app --platform node --main Main --to index.js && printf '%s\n%s' \"#!/usr/bin/env node\" \"$(cat index.js)\" > index.js"
+  },
+  "bin": {
+    "orchy": "./index.js"
+  }
 }

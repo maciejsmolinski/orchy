@@ -1,13 +1,13 @@
-exports.pathname = function pathname(input) {
-    var URL = require('url').URL;
-    var url = new URL(input, 'http://localhost');
+import { URL } from "url";
 
-    return url.pathname;
+export function pathname(input) {
+  var url = new URL(input, "http://localhost");
+
+  return url.pathname;
 }
 
-exports.param_ = function param_(param, input) {
-    var URL = require('url').URL;
-    var url = new URL(input, 'http://localhost');
+export function param_(param, input) {
+  var url = new URL(input, "http://localhost");
 
-    return url.searchParams.get(param) || ''
+  return url.searchParams.get(param) || "";
 }
