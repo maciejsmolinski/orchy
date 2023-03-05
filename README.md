@@ -115,8 +115,8 @@ Finally, when everything succeeds:
 ## Local development
 
 ```shell
-$ npm install -g spago@0.9.0 purescript@0.13.3
-$ spago bundle-app -w
+$ npm install -g spago@0.20.9 purescript@0.15.7 esbuild@0.17.11
+$ spago bundle-app --platform=node -w
 $ npx nodemon index.js
 ```
 

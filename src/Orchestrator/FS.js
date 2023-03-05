@@ -1,13 +1,13 @@
-var fs = require('fs');
+import * as fs from "fs";
 
-exports.readFile_ = function(left, right, filename) {
-    return function() {
-        try {
-            var buffer = fs.readFileSync(filename, { encoding: 'UTF-8' });
+export function readFile_(left, right, filename) {
+  return function () {
+    try {
+      var buffer = fs.readFileSync(filename, { encoding: "UTF-8" });
 
-            return right(buffer.toString());
-        } catch (error) {
-            return left(error.message);
-        }
+      return right(buffer.toString());
+    } catch (error) {
+      return left(error.message);
     }
+  };
 }
