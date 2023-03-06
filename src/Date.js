@@ -1,5 +1,5 @@
 function date() {
-  var currentDate = new Date();
+  const currentDate = new Date();
 
   return [
     String(currentDate.getDate()).padStart(2, "0"),
@@ -12,19 +12,19 @@ function date() {
 }
 
 export function ddmmyyyy() {
-  var currentDate = date();
+  const currentDate = date();
 
   return currentDate[0] + "/" + currentDate[1] + "/" + currentDate[2];
 }
 
 export function yyyymmdd() {
-  var currentDate = date();
+  const currentDate = date();
 
   return currentDate[2] + "/" + currentDate[1] + "/" + currentDate[0];
 }
 
 export function hhmmss() {
-  var currentDate = date();
+  const currentDate = date();
 
   return currentDate[3] + ":" + currentDate[4] + ":" + currentDate[5];
 }
