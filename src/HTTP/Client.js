@@ -3,17 +3,17 @@ import { URL } from "url";
 
 export function post_(url, payload) {
   return function (onError, onSuccess) {
-    var parsedUrl = new URL(url);
-    var hostname = parsedUrl.hostname;
-    var path = parsedUrl.pathname + parsedUrl.search;
-    var port =
+    const parsedUrl = new URL(url);
+    const hostname = parsedUrl.hostname;
+    const path = parsedUrl.pathname + parsedUrl.search;
+    const port =
       parsedUrl.protocol === "https:"
         ? "443"
         : parsedUrl.protocol === "http:"
         ? 80
         : parsedUrl.port;
 
-    var request = https.request(
+    const request = https.request(
       {
         hostname: hostname,
         path: path,

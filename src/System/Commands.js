@@ -1,8 +1,8 @@
 import { spawnSync } from "child_process";
 
 function run(command, args, options) {
-  var process = spawnSync(command, args, options || {});
-  var output;
+  const process = spawnSync(command, args, options || {});
+  let output;
 
   if (process.status === 0) {
     output = process.stdout ? process.stdout.toString().trim() : "";
@@ -18,7 +18,7 @@ function run(command, args, options) {
 
 export function asyncExec_(right, left, canceler, cb, command, args, options) {
   setTimeout(function () {
-    var result = run(command, args, options);
+    const result = run(command, args, options);
 
     cb(result[0] ? right(result[1]) : left(new Error(result[1])))();
   });

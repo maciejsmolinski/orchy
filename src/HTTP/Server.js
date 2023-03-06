@@ -1,7 +1,7 @@
 import http from "http";
 
 export function startSync_(port, onSuccess) {
-  var server = http.createServer(function (req, res) {
+  const server = http.createServer(function (req, res) {
     onSuccess(req.url)();
     res.end("success");
   });
@@ -10,7 +10,7 @@ export function startSync_(port, onSuccess) {
 
 export function startAsync_(port) {
   return function (onError, onSuccess) {
-    var server = http.createServer(function (req, res) {
+    const server = http.createServer(function (req, res) {
       onSuccess(req.url);
       res.end("success");
     });
