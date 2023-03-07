@@ -2,10 +2,9 @@ import { spawnSync } from "child_process";
 
 function run(command, args, options) {
   const process = spawnSync(command, args, options || {});
-  let output;
 
   if (process.status === 0) {
-    output = process.stdout ? process.stdout.toString().trim() : "";
+    const output = process.stdout ? process.stdout.toString().trim() : "";
 
     return [true, output];
   }

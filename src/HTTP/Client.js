@@ -8,7 +8,7 @@ export function post_(url, payload) {
     const path = parsedUrl.pathname + parsedUrl.search;
     const port =
       parsedUrl.protocol === "https:"
-        ? "443"
+        ? 443
         : parsedUrl.protocol === "http:"
         ? 80
         : parsedUrl.port;
