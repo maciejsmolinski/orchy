@@ -12,19 +12,19 @@ function date() {
 }
 
 export function ddmmyyyy() {
-  const currentDate = date();
+  const [day, month, year] = date();
 
-  return currentDate[0] + "/" + currentDate[1] + "/" + currentDate[2];
+  return [day, month, year].join("/");
 }
 
 export function yyyymmdd() {
-  const currentDate = date();
+  const [day, month, year] = date();
 
-  return currentDate[2] + "/" + currentDate[1] + "/" + currentDate[0];
+  return [year, month, day].join("/");
 }
 
 export function hhmmss() {
-  const currentDate = date();
+  const [, , , hours, minutes, seconds] = date();
 
-  return currentDate[3] + ":" + currentDate[4] + ":" + currentDate[5];
+  return [hours, minutes, seconds].join("/");
 }
