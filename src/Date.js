@@ -26,5 +26,5 @@ export function yyyymmdd() {
 export function hhmmss() {
   const [, , , hours, minutes, seconds] = date();
 
-  return [hours, minutes, seconds].join("/");
+  return [hours, minutes, seconds].join(":");
 }
