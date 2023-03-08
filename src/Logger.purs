@@ -21,7 +21,7 @@ withTimestamp :: String -> Effect String
 withTimestamp message = do
   date <- yyyymmdd
   hour <- hhmmss
-  pure $ darkgray <> date <> " " <> hour <> clear <> " " <> message
+  pure $ dim <> date <> " " <> hour <> clear <> " " <> message
 
 lines :: String -> Array String
 lines = split (Pattern "\n")
@@ -44,8 +44,8 @@ quote = (traverse_ (logWithTimestamp <<< format Empty)) <<< lines
 format :: Format -> String -> String
 format Info message = bold <> blue <> "info " <> clear <> message <> clear
 format Error message = bold <> red <> "err  " <> clear <> message <> clear
-format Log message = darkgray <> message <> clear
-format Empty message = "     " <> darkgray <> message <> clear
+format Log message = dim <> message <> clear
+format Empty message = "     " <> dim <> message <> clear
 
 code :: String -> String
 code a = "\x1b[" <> a <> "m"
@@ -62,8 +62,8 @@ blue = code "34"
 bold :: String
 bold = code "1"
 
-darkgray :: String
-darkgray = code "90"
+dim :: String
+dim = code "2"
 
 clear :: String
 clear = code "0"
