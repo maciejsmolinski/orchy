@@ -1,5 +1,6 @@
 src
 .spago
+.purs-repl
 output
 configuration.json
 configuration.json.example
