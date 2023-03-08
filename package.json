@@ -18,7 +18,7 @@
     "esbuild": "^0.17.11"
   },
   "scripts": {
-    "prepublish": "spago bundle-app --platform node --main Main --to index.js && printf '%s\n%s' \"#!/usr/bin/env node\" \"$(cat index.js)\" > index.js"
+    "prepublish": "spago bundle-app --minify --platform node --main Main --to index.js && printf '%s\n%s' \"#!/usr/bin/env node\" \"$(cat index.js)\" > index.js"
   },
   "bin": {
     "orchy": "./index.js"
