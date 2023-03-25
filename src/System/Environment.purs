@@ -3,10 +3,10 @@ module System.Environment (readEnvString, readEnvInt) where
 import Control.Applicative (pure)
 import Control.Monad (bind, (>>=))
 import Data.Function (identity, ($))
+import Data.Int (fromString)
 import Data.Maybe (Maybe(..), maybe)
 import Effect (Effect)
 import Node.Process (lookupEnv)
-import Simple.JSON (readJSON_)
 
 readEnvString :: String -> String -> Effect String
 readEnvString variable defaultValue = do
@@ -16,6 +16,6 @@ readEnvString variable defaultValue = do
 readEnvInt :: String -> Int -> Effect Int
 readEnvInt variable defaultValue = do
   maybeValue <- lookupEnv variable
-  case (maybeValue >>= readJSON_ :: Maybe Int) of
+  case (maybeValue >>= fromString) of
     Nothing -> pure defaultValue
     (Just value) -> pure value
