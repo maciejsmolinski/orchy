@@ -53,9 +53,6 @@ code a = "\x1b[" <> a <> "m"
 red :: String
 red = code "31"
 
-yellow :: String
-yellow = code "33"
-
 blue :: String
 blue = code "34"
 
