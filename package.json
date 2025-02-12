@@ -15,7 +15,7 @@
   "devDependencies": {
     "purescript": "^0.15.7",
     "spago": "^0.20.9",
-    "esbuild": "^0.17.11"
+    "esbuild": "^0.25.0"
   },
   "scripts": {
     "prepublish": "spago bundle-app --minify --platform node --main Main --to index.js && printf '%s\n%s' \"#!/usr/bin/env node\" \"$(cat index.js)\" > index.js"
